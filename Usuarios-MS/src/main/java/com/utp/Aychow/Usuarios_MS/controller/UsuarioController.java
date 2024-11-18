@@ -4,13 +4,12 @@ import com.utp.Aychow.Usuarios_MS.entity.Usuario;
 import com.utp.Aychow.Usuarios_MS.request.LoginRequest;
 import com.utp.Aychow.Usuarios_MS.request.UsuarioRequest;
 import com.utp.Aychow.Usuarios_MS.service.UsuarioService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,7 +21,7 @@ public class UsuarioController {
     @Autowired
     private UsuarioService usuarioService;
 
-
+    private static final Logger logger = LoggerFactory.getLogger(UsuarioController.class);
 
     @GetMapping
     public List<Usuario> getAllUsuarios() {
@@ -49,6 +48,11 @@ public class UsuarioController {
         usuarioService.eliminarUsuario(id);
     }
 
+    @GetMapping("/email")
+    public Usuario getUsuarioByEmail(@RequestParam String email) {
+        return usuarioService.getUsuarioByCorreo(email);
+    }
+
     @PostMapping("/login")
     public ResponseEntity<Usuario> login(@RequestBody LoginRequest loginRequest) {
         try {
@@ -60,4 +64,15 @@ public class UsuarioController {
     }
 
 
+    @GetMapping("/me")
+    public ResponseEntity<Usuario> getCurrentUser(Authentication authentication) {
+        if (authentication != null && authentication.isAuthenticated()) {
+            Usuario currentUser = (Usuario) authentication.getPrincipal(); // Cast or retrieve user details
+            logger.info("Usuario autenticado: {}", currentUser);
+            return ResponseEntity.ok(currentUser); } logger.warn("Usuario no autenticado");
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    }
+
+
 }
+

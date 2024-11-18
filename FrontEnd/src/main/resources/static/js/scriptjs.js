@@ -1,20 +1,23 @@
-$('.carousel2 .carousel-item2').each(function(){
-    var minPerSlide = 4;
-    var next = $(this).next();
-    if (!next.length) {
-        next = $(this).siblings(':first');
-    }
-    next.children(':first-child').clone().appendTo($(this));
-
-    for (var i=0;i<minPerSlide;i++) {
-        next=next.next();
+$(document).ready(function() {
+    $('.carousel2 .carousel-item2').each(function () {
+        var minPerSlide = 4;
+        var next = $(this).next();
         if (!next.length) {
             next = $(this).siblings(':first');
         }
-
         next.children(':first-child').clone().appendTo($(this));
-    }
+
+        for (var i = 0; i < minPerSlide; i++) {
+            next = next.next();
+            if (!next.length) {
+                next = $(this).siblings(':first');
+            }
+
+            next.children(':first-child').clone().appendTo($(this));
+        }
+    });
 });
+
 //funcion para añadir a favortios
 
 
@@ -32,7 +35,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (productoExistente) {
                 alert('Ya añadiste este producto a favoritos.');
             } else {
-                favoritos.push({ id, title, price, thumbnail, description });
+                favoritos.push({id, title, price, thumbnail, description});
                 alert('Añadido a favoritos.');
                 localStorage.setItem('favoritos', JSON.stringify(favoritos));
             }
@@ -40,25 +43,20 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
-$(document).ready(function() {
-    // Evento para manejar clic en los botones de filtro
-    $('.filter-btn').click(function() {
+$(document).ready(function () {
+    // Product filtering event
+    $('.filter-btn').click(function () {
         let marcaSeleccionada = $(this).data('marca');
-
 
         $.ajax({
             url: '/productos/por-marca',
             type: 'GET',
-            data: {
-                marca: marcaSeleccionada
-            },
-            success: function(response) {
+            data: {marca: marcaSeleccionada},
+            success: function (response) {
                 console.log(response);
-                // Limpia la lista actual de productos
                 $('#productos-list').empty();
 
-                // Iterar sobre los productos recibidos y agregarlos al DOM
-                response.forEach(function(producto) {
+                response.forEach(function (producto) {
                     let productCard = `
                         <div class="col mb-5" data-marca="${producto.marca}">
                             <div class="card h-100">
@@ -82,9 +80,107 @@ $(document).ready(function() {
                     $('#productos-list').append(productCard);
                 });
             },
-            error: function(err) {
+            error: function (err) {
                 console.error('Error al obtener productos:', err);
             }
         });
     });
 });
+    $(document).ready(function () {
+        // Formulario de Login
+        $('#loginForm').submit(function (event) {
+            event.preventDefault();
+
+            const email = $('#correo').val();
+            const password = $('#password').val();
+
+            fetch('http://localhost:8080/api/usuarios/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ correo: email, password: password })
+            })
+                .then(response => {
+                    if (response.ok) {
+                        localStorage.setItem('userEmail', email);
+                        return response.json();
+                    } else {
+                        throw new Error('Login fallido');
+                    }
+                })
+                .then(data => {
+                    localStorage.setItem('authToken', data.token);
+                    window.location.href = '/';
+                })
+                .catch(error => {
+                    console.error('Error durante el login:', error);
+                    $('#error').text('Login fallido. Por favor, verifica tus credenciales.');
+                });
+        });
+
+        // Obtener detalles del usuario
+        async function getUserDetails() {
+            const email = localStorage.getItem('userEmail');
+            const authToken = localStorage.getItem('authToken');
+            const userNameElement = $('#userName');
+
+            if (email && authToken) {
+                try {
+                    const response = await fetch(`http://localhost:8080/api/usuarios/email?email=${email}`, {
+                        headers: {
+                            'Authorization': `Bearer ${authToken}`
+                        }
+                    });
+
+                    if (response.ok) {
+                        const user = await response.json();
+                        userNameElement.text(user.nombre);
+                        $('#userMenu').hide();
+                    } else {
+                        console.error('Error al obtener los detalles del usuario');
+                        setLoginView();
+                    }
+                } catch (error) {
+                    console.error('Error fetching user details:', error);
+                    setLoginView();
+                }
+            } else {
+                setLoginView();
+            }
+        }
+
+        // Configurar vista de login
+        function setLoginView() {
+            $('#userName').text('Login');
+            $('#userMenu').hide();
+            $('#userButton').on('click', function () {
+                window.location.href = '/login';
+            });
+        }
+
+        // Cargar detalles de usuario al cargar la página
+        getUserDetails();
+
+        // Funcionalidad de logout
+        $('#userMenu').find('[href="/logout"]').click(function (event) {
+            event.preventDefault();
+            localStorage.removeItem('userEmail');
+            localStorage.removeItem('authToken');
+            setLoginView();
+            window.location.href = '/login';
+        });
+
+        // Mostrar/Ocultar el dropdown al hacer clic
+        $('#userButton').click(function (event) {
+            event.stopPropagation();
+            $('#userMenu').toggle();
+        });
+
+        // Cerrar el dropdown al hacer clic fuera de él
+        $(document).click(function (event) {
+            if (!$(event.target).closest('#userButton').length && !$(event.target).closest('#userMenu').length) {
+                $('#userMenu').hide();
+            }
+        });
+    });

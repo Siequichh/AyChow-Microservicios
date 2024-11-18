@@ -1,6 +1,9 @@
 package com.utp.Aychow.FrontEnd.controller;
 
 import com.utp.Aychow.FrontEnd.model.Producto;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -64,9 +67,15 @@ public class HomeController {
         return "tienda";
     }
 
+
     @GetMapping("/checkout")
     public String checkout() {
-        return "checkout";
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.isAuthenticated() && !(authentication instanceof AnonymousAuthenticationToken)) {
+            return "checkout";
+        } else {
+            return "redirect:/login";
+        }
     }
 
     @GetMapping("/favoritos")

@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
@@ -16,7 +17,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authz -> authz
                         .requestMatchers("/","/css/**", "/js/**", "/img/**","AyChow/**","/upload","/tienda","/favoritos","/conocenos","/login","/registro","/restaurarContraseña","/productos/**","/usuarios/**","/carrito/**","/historial").permitAll()
                         .requestMatchers("/admin/**").hasRole("Admin")
-                        .requestMatchers("/checkout").authenticated()
+                        .requestMatchers("/checkout")
+                        .authenticated()
                         .anyRequest().authenticated()
                 )
                 .formLogin(login -> login
@@ -28,8 +30,7 @@ public class SecurityConfig {
                         .logoutSuccessUrl("/") // Redirect to home or login page after logout
                         .invalidateHttpSession(true)
                         .deleteCookies("JSESSIONID")
-                );
-
+                ).sessionManagement(session -> session .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED) );
 
         return http.build();
     }

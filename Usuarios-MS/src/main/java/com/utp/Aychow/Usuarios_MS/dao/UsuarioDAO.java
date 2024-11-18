@@ -11,4 +11,5 @@ public interface UsuarioDAO extends JpaRepository<Usuario, Long> {
     List<Usuario> findByNombre(String nombre);
     Usuario findByCorreo(String correo);
     boolean existsByDni(String dni);
+
 }
