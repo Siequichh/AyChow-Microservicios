@@ -4,6 +4,9 @@ import com.utp.Aychow.Usuarios_MS.entity.Usuario;
 import com.utp.Aychow.Usuarios_MS.request.LoginRequest;
 import com.utp.Aychow.Usuarios_MS.request.UsuarioRequest;
 import com.utp.Aychow.Usuarios_MS.service.UsuarioService;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +15,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/usuarios")
@@ -54,12 +60,27 @@ public class UsuarioController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Usuario> login(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
         try {
             Usuario usuario = usuarioService.autenticarUsuario(loginRequest.getCorreo(), loginRequest.getPassword());
-            return ResponseEntity.ok(usuario);
+
+            // Generate JWT token
+            String token = Jwts.builder()
+                    .setSubject(usuario.getCorreo())
+                    .setIssuedAt(new Date())
+                    .setExpiration(new Date(System.currentTimeMillis() + 3600000))
+                    .signWith(Keys.secretKeyFor(SignatureAlgorithm.HS256))
+                    .compact();
+
+            // Prepare the response with token
+            Map<String, Object> response = new HashMap<>();
+            response.put("token", token);
+            response.put("nombre", usuario.getNombre()); // Optional: send user's name
+
+            return ResponseEntity.ok(response);
+
         } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Correo o contraseña incorrectos");
         }
     }
 

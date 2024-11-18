@@ -30,7 +30,7 @@ public class SecurityConfig {
                         .logoutSuccessUrl("/") // Redirect to home or login page after logout
                         .invalidateHttpSession(true)
                         .deleteCookies("JSESSIONID")
-                ).sessionManagement(session -> session .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED) );
+                );
 
         return http.build();
     }

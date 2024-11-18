@@ -71,9 +71,11 @@ public class HomeController {
     @GetMapping("/checkout")
     public String checkout() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null && authentication.isAuthenticated() && !(authentication instanceof AnonymousAuthenticationToken)) {
+        if (authentication != null && authentication.isAuthenticated() &&
+                !(authentication instanceof AnonymousAuthenticationToken)) {
             return "checkout";
         } else {
+            // No autenticado, redirigir a login
             return "redirect:/login";
         }
     }

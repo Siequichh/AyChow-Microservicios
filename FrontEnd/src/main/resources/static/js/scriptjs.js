@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 $(document).ready(function () {
-    // Product filtering event
+
     $('.filter-btn').click(function () {
         let marcaSeleccionada = $(this).data('marca');
 
@@ -87,7 +87,6 @@ $(document).ready(function () {
     });
 });
     $(document).ready(function () {
-        // Formulario de Login
         $('#loginForm').submit(function (event) {
             event.preventDefault();
 
@@ -110,7 +109,11 @@ $(document).ready(function () {
                     }
                 })
                 .then(data => {
-                    localStorage.setItem('authToken', data.token);
+                    if (data.token) {
+                        localStorage.setItem('authToken', data.token); // Store the token
+                    } else {
+                        console.warn("No authToken received in the response");
+                    }
                     window.location.href = '/';
                 })
                 .catch(error => {
@@ -119,12 +122,10 @@ $(document).ready(function () {
                 });
         });
 
-        // Obtener detalles del usuario
         async function getUserDetails() {
             const email = localStorage.getItem('userEmail');
             const authToken = localStorage.getItem('authToken');
             const userNameElement = $('#userName');
-
             if (email && authToken) {
                 try {
                     const response = await fetch(`http://localhost:8080/api/usuarios/email?email=${email}`, {
@@ -150,7 +151,6 @@ $(document).ready(function () {
             }
         }
 
-        // Configurar vista de login
         function setLoginView() {
             $('#userName').text('Login');
             $('#userMenu').hide();
@@ -159,10 +159,9 @@ $(document).ready(function () {
             });
         }
 
-        // Cargar detalles de usuario al cargar la página
         getUserDetails();
 
-        // Funcionalidad de logout
+
         $('#userMenu').find('[href="/logout"]').click(function (event) {
             event.preventDefault();
             localStorage.removeItem('userEmail');
@@ -171,16 +170,29 @@ $(document).ready(function () {
             window.location.href = '/login';
         });
 
-        // Mostrar/Ocultar el dropdown al hacer clic
         $('#userButton').click(function (event) {
             event.stopPropagation();
             $('#userMenu').toggle();
         });
 
-        // Cerrar el dropdown al hacer clic fuera de él
         $(document).click(function (event) {
             if (!$(event.target).closest('#userButton').length && !$(event.target).closest('#userMenu').length) {
                 $('#userMenu').hide();
             }
         });
+
+
+
     });
+
+function checkAuthenticated() {
+    const authToken = localStorage.getItem('authToken');
+    const userEmail = localStorage.getItem('userEmail');
+
+    if (!authToken || !userEmail) {
+        alert('Please log in to proceed to checkout.');
+        window.location.href = '/login';
+        return false;
+    }
+    return true;
+}

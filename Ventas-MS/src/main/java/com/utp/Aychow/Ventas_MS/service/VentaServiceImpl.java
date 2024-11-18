@@ -39,28 +39,7 @@ public class VentaServiceImpl implements VentaService {
         return ventaDAO.findByIdUsuario(idUsuario);
     }
 
-//    @Override
-//    @Transactional
-//    public Venta generarVenta(VentaRequest ventaRequest) {
-//        Venta venta = new Venta();
-//        venta.setIdUsuario(ventaRequest.getIdUsuario());
-//        venta.setFecha(LocalDate.now());
-//        venta.setTotal(ventaRequest.getTotal());
-//
-//        Venta nuevaVenta = ventaDAO.save(venta);
-//
-//        List<DetalleVenta> detalles = ventaRequest.getDetalles().stream()
-//                .map(detalle -> {
-//                    detalle.setVenta(nuevaVenta);
-//                    return detalle;
-//                })
-//                .collect(Collectors.toList());
-//
-//        detalleVentaDAO.saveAll(detalles);
-//
-//
-//        return nuevaVenta;
-//    }
+
 @Override
 @Transactional
 public Venta generarVenta(VentaRequest ventaRequest) {

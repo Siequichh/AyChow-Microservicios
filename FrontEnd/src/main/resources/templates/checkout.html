@@ -49,7 +49,6 @@
 <body>
 <!-- Header personalizado -->
 <div th:replace="~{base :: header}"></div>
-<a href="/checkout" onclick="return checkAuthenticated()">Checkout</a>
 <!-- Checkout container -->
 <div class="container mt-5 checkout-container">
   <!-- Formulario de entrega -->
@@ -184,14 +183,17 @@
     }
   });
 
-  function checkAuthenticated() {
-    if (!localStorage.getItem('userEmail')) {
-      alert('Please log in to proceed to checkout.');
-      window.location.href = '/login';
-      return false;
+
+    function checkAuthenticated() {
+      if (!localStorage.getItem('userEmail') || !localStorage.getItem('authToken')) {
+        alert('Please log in to proceed to checkout.');
+        window.location.href = '/login';
+        return false;
+      }
+      return true;
     }
-    return true;
-  }
+
+
 </script>
 </body>
 </html>
