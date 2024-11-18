@@ -1,0 +1,179 @@
+/* Styles nav */
+
+#listanav li a {
+    color: #ffffff;
+    transition: all 0.3s ease;
+}
+
+#listanav li {
+    font-size: auto;
+}
+
+#listanav li a:hover {
+    color: #28a745;
+    text-shadow: black;
+    text-decoration: underline;
+
+}
+
+.form-control {
+    width: 200px;
+}
+
+@media (max-width: 366px) {
+    #listanav li {
+        font-size: 14px;
+    }
+
+    body {
+        overflow-x: hidden;
+    }
+}
+
+.info-nav {
+    width: 100vw;
+    height: 40px;
+    background: black;
+}
+
+/* footer al final*/
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+main {
+    flex: 1;
+}
+
+footer {
+    position: relative;
+    bottom: 0;
+    width: 100%;
+    background-color: #343a40;
+}
+
+.navbar {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+}
+
+/* cards */
+
+@media (max-width: 768px) {
+    .carousel-inner .carousel-item > div {
+        display: none;
+    }
+    .carousel-inner .carousel-item > div:first-child {
+        display: block;
+    }
+}
+
+.carousel-inner .carousel-item.active,
+.carousel-inner .carousel-item-start,
+.carousel-inner .carousel-item-next,
+.carousel-inner .carousel-item-prev {
+    display: flex;
+    transition-duration: 1s;
+}
+
+/* display 4 */
+@media (min-width: 768px) {
+    .carousel-inner .carousel-item-right.active,
+    .carousel-inner .carousel-item-next,
+    .carousel-item-next:not(.carousel-item-start) {
+        transform: translateX(25%) !important;
+    }
+
+    .carousel-inner .carousel-item-left.active,
+    .carousel-item-prev:not(.carousel-item-end),
+    .active.carousel-item-start,
+    .carousel-item-prev:not(.carousel-item-end) {
+        transform: translateX(-25%) !important;
+    }
+
+    .carousel-item-next.carousel-item-start, .active.carousel-item-end {
+        transform: translateX(0) !important;
+    }
+
+    .carousel-inner .carousel-item-prev,
+    .carousel-item-prev:not(.carousel-item-end) {
+        transform: translateX(-25%) !important;
+    }
+}
+
+/* Centrado solo para el formulario de login  y registro */
+.login-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: grey;
+}
+
+.login-container {
+    background-color: white;
+    border-radius: 20px;
+    padding: 40px;
+    width: 400px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    margin-top: -150px;
+}
+
+.login-title {
+    font-size: 1.5em;
+    margin-bottom: 20px;
+}
+
+img.logo-img {
+    display: block;
+    margin: 0 auto;
+    width: 100px;
+    height: 100px;
+    margin-bottom: 20px; /* Espacio entre la imagen y el campo de correo */
+}
+
+.form-control-login {
+    margin-top: 10px; /* Puedes ajustar este valor si deseas más separación */
+}
+
+.registro-container {
+    background-color: white;
+    border-radius: 20px;
+    padding: 40px;
+    width: 600px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    margin-top: -150px;
+}
+/* css para la parte de Tienda */
+.card {
+    transition: transform 0.2s ease-in-out;
+}
+
+.card:hover {
+    transform: scale(1.05);
+}
+
+#detallesModal img {
+    max-width: 100%;
+    height: auto;
+}
+
+.card-img-container {
+    height: 250px;
+    overflow: hidden;
+}
+
+.card-img-top {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.cart-popup {
+    width: 300px;
+    border: 1px solid #ccc;
+}

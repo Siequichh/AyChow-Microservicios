@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:replace="~{base :: title('Inicio')}">Inicio - AYCHOW</title>
+    <link rel="icon" type="image/x-icon" th:href="@{/img/logoAyChow.jpeg}">
+    <link rel="stylesheet" th:href="@{/css/basestyles.css}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+<!-- Header del base (importado con Thymeleaf) -->
+<div th:replace="~{base :: header}"></div>
+
+<!-- Contenedor de login centrado -->
+<div class="login-page">
+    <div class="registro-container text-center">
+        <h1 class="login-title mb-4">Crear nueva cuenta de cliente</h1>
+        <img th:src="@{/img/logoAyChow.jpeg}" alt="Logo" class="mb-4 logo-img">
+
+        <!-- Formulario corregido con el método POST -->
+        <form id="registro" th:action="@{/usuarios/registro}" method="post">
+            <div class="d-flex justify-content-between mt-3">
+                <input type="text" name="nombre" class="form-control me-3 mb-3" placeholder="Nombres" required>
+                <input type="text" name="apellido" class="form-control mb-3" placeholder="Apellidos" required>
+            </div>
+            <div class="form-group mb-3">
+                <input type="email" name="correo" class="form-control" placeholder="Correo electrónico" required>
+            </div>
+            <div class="form-group mb-3">
+                <input type="password" name="password" class="form-control" placeholder="Contraseña" required>
+            </div>
+            <p class="fw-bold lh-1 text-small">Utilice al menos una letra, un número y siete caracteres</p>
+            <button type="submit" class="btn btn-dark w-100">Crear Cuenta</button>
+        </form>
+    </div>
+</div>
+
+<!-- Modal de éxito -->
+<div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Registro Exitoso</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                ¡Tu cuenta ha sido creada exitosamente!
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="closeModalBtn" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Scripts de Bootstrap -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+
+<script>
+    document.getElementById("registro").addEventListener("submit", function(event) {
+        event.preventDefault(); // Evitar el envío del formulario
+
+        // Crear el objeto FormData con los datos del formulario
+        var formData = new FormData(this);
+
+        // Hacer la solicitud POST usando fetch
+        fetch(this.action, {
+            method: 'POST',
+            body: formData
+        })
+            .then(response => {
+                if (response.ok) {
+                    // Mostrar el modal si el registro fue exitoso
+                    var successModal = new bootstrap.Modal(document.getElementById('successModal'));
+                    successModal.show();
+
+                    // Evento que se activa cuando el modal se cierra
+                    document.getElementById('successModal').addEventListener('hidden.bs.modal', function () {
+                        window.location.href = '/login'; // Redirigir a login.html cuando se cierre el modal
+                    });
+                } else {
+                    alert("Error al crear la cuenta. Inténtelo de nuevo.");
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    });
+</script>
+
+
+</body>
+</html>

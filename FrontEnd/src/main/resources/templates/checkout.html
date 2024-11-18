@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checkout - AYCHOW</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    .checkout-container {
+      display: flex;
+      justify-content: space-between;
+      padding: 20px;
+    }
+    .form-container, .order-summary {
+      background-color: #f8f9fa;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+    .form-container {
+      flex: 0.6;
+      margin-right: 20px;
+    }
+    .order-summary {
+      flex: 0.4;
+    }
+    .order-summary h4, .form-container h4 {
+      margin-bottom: 20px;
+    }
+    .form-group {
+      margin-bottom: 15px;
+    }
+    .btn-custom {
+      background-color: black;
+      color: white;
+      width: 100%;
+      padding: 10px;
+      border: none;
+      cursor: pointer;
+    }
+    .btn-custom:hover {
+      background-color: #333;
+    }
+  </style>
+</head>
+<body>
+<!-- Header personalizado -->
+<div th:replace="~{base :: header}"></div>
+
+<!-- Checkout container -->
+<div class="container mt-5 checkout-container">
+  <!-- Formulario de entrega -->
+  <div class="form-container">
+    <h4>1. Ingrese sus datos de entrega</h4>
+    <form>
+      <div class="form-group">
+        <label for="dni">D.N.I./C.E.</label>
+        <input type="text" class="form-control" id="dni" placeholder="Ingrese su D.N.I. o C.E." required>
+      </div>
+      <div class="form-group">
+        <label for="nombre">Nombre</label>
+        <input type="text" class="form-control" id="nombre" placeholder="Nombre completo" required>
+      </div>
+      <div class="form-group">
+        <label for="apellidos">Apellidos</label>
+        <input type="text" class="form-control" id="apellidos" placeholder="Apellidos" required>
+      </div>
+      <div class="form-group">
+        <label for="telefono">Número de Teléfono</label>
+        <input type="text" class="form-control" id="telefono" placeholder="Teléfono de contacto" required>
+      </div>
+      <div class="form-group">
+        <label for="direccion">Dirección de Envío</label>
+        <input type="text" class="form-control" id="direccion" placeholder="Calle, Número, Depto/Interior/Referencia" required>
+      </div>
+      <div class="form-group">
+        <label for="departamento">Departamento</label>
+        <select class="form-select" id="departamento" required>
+          <option>Seleccione su Departamento</option>
+          <option value="lima">Lima</option>
+          <option value="arequipa">Arequipa</option>
+          <!-- Más opciones -->
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="provincia">Provincia</label>
+        <select class="form-select" id="provincia" required>
+          <option>Seleccione su Provincia</option>
+          <option value="lima">Lima</option>
+          <option value="callao">Callao</option>
+          <!-- Más opciones -->
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="distrito">Distrito</label>
+        <select class="form-select" id="distrito" required>
+          <option>Seleccione su Distrito</option>
+          <option value="miraflores">Miraflores</option>
+          <option value="san-isidro">San Isidro</option>
+          <!-- Más opciones -->
+        </select>
+      </div>
+    </form>
+  </div>
+
+  <!-- Resumen del pedido -->
+  <div class="order-summary">
+    <h4>Resumen del Pedido</h4>
+    <div id="productos"></div>
+    <p><strong>Subtotal:</strong> S/ <span id="subtotal">0.00</span></p>
+    <p><strong>Impuestos:</strong> S/ <span id="impuestos">0.00</span></p>
+    <p><strong>Total del Pedido:</strong> S/ <span id="total">0.00</span></p>
+
+    <div class="form-check my-3">
+      <input type="checkbox" class="form-check-input" id="terminos">
+      <label class="form-check-label" for="terminos">Acepto los Términos y Condiciones</label>
+    </div>
+
+    <button class="btn-custom" id="realizar-pedido">Realizar Pedido</button>
+  </div>
+</div>
+
+<!-- Footer personalizado -->
+<div th:replace="~{base :: footer}"></div>
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+<script th:src="@{/js/scriptjs.js}"></script>
+<script>
+  // Función para mostrar el carrito en la página de checkout
+  function mostrarCarritoCheckout() {
+    const carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+    const productosDiv = document.getElementById('productos');
+    productosDiv.innerHTML = '';  // Limpiamos el contenido previo
+
+    if (carrito.length === 0) {
+      productosDiv.innerHTML = '<p>No hay productos en tu carrito.</p>';
+      document.getElementById('subtotal').innerText = '0.00';
+      document.getElementById('impuestos').innerText = '0.00';
+      document.getElementById('total').innerText = '0.00';
+    } else {
+      let subtotal = 0;
+
+      carrito.forEach(producto => {
+        const productoHTML = `
+                <p><strong>Producto:</strong> ${producto.title}</p>
+                <p><strong>Precio:</strong> S/ ${producto.price}</p>
+                <hr>
+            `;
+        productosDiv.insertAdjacentHTML('beforeend', productoHTML);
+        subtotal += parseFloat(producto.price);
+      });
+
+      // Calculamos los totales
+      const impuestos = subtotal * 0.18;  // Ejemplo: 18% de impuestos
+      const total = subtotal + impuestos;
+
+      document.getElementById('subtotal').innerText = subtotal.toFixed(2);
+      document.getElementById('impuestos').innerText = impuestos.toFixed(2);
+      document.getElementById('total').innerText = total.toFixed(2);
+    }
+  }
+
+  // Ejecutar al cargar la página de checkout
+  document.addEventListener('DOMContentLoaded', mostrarCarritoCheckout);
+
+  // Agregar funcionalidad al botón de "Realizar Pedido"
+  document.getElementById('realizar-pedido').addEventListener('click', function() {
+    const aceptoTerminos = document.getElementById('terminos').checked;
+
+    if (!aceptoTerminos) {
+      alert('Debe aceptar los Términos y Condiciones para continuar.');
+      return;
+    }
+
+    const carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+    if (carrito.length === 0) {
+      alert('No hay productos en el carrito para procesar.');
+    } else {
+      alert('Pedido realizado con éxito.');
+      // Aquí puedes procesar el pedido o redirigir a una página de confirmación
+    }
+  });
+</script>
+</body>
+</html>
