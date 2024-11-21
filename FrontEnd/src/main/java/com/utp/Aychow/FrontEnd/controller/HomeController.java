@@ -1,6 +1,7 @@
 package com.utp.Aychow.FrontEnd.controller;
 
 import com.utp.Aychow.FrontEnd.model.Producto;
+import com.utp.Aychow.FrontEnd.model.Usuario;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -9,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import java.security.Principal;
 import java.util.List;
 
 @Controller
@@ -21,7 +23,7 @@ public class HomeController {
     }
 
     @GetMapping("/")
-    public String index(Model model) {
+    public String index(Model model, Principal principal) {
         List<Producto> mejoresProductos = webClientBuilder.build()
                 .get()
                 .uri("http://api-gateway/api/productos/rating-mayor/8.0")
@@ -40,10 +42,32 @@ public class HomeController {
 
         model.addAttribute("mejoresProductos", mejoresProductos);
         model.addAttribute("productosEnDescuento", productosEnDescuento);
+
+        if (principal != null) {
+
+            Usuario usuario = webClientBuilder.build()
+                    .get()
+                    .uri("http://api-gateway/api/usuarios/email?email=" + principal.getName())
+                    .retrieve()
+                    .bodyToMono(Usuario.class)
+                    .block();
+            model.addAttribute("userName", usuario.getNombre());
+        }
+
         return "index";
     }
 
-    @GetMapping("/AyChow/productos")
+        @GetMapping("/checkout")
+        public String checkout() {
+            return "checkout";
+        }
+
+
+    @GetMapping("/upload")
+    public String subida() {
+        return "upload";
+    }
+    @GetMapping("/admin")
     public String productosAdmin(Model model) {
         List<Producto> productos = webClientBuilder.build()
                 .get()
@@ -56,29 +80,11 @@ public class HomeController {
         return "productosAdmin";
     }
 
-
-    @GetMapping("/upload")
-    public String subida() {
-        return "upload";
-    }
-
     @GetMapping("/tienda")
     public String tienda() {
         return "tienda";
     }
 
-
-    @GetMapping("/checkout")
-    public String checkout() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null && authentication.isAuthenticated() &&
-                !(authentication instanceof AnonymousAuthenticationToken)) {
-            return "checkout";
-        } else {
-            // No autenticado, redirigir a login
-            return "redirect:/login";
-        }
-    }
 
     @GetMapping("/favoritos")
     public String favoritos() {

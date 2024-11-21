@@ -86,113 +86,113 @@ $(document).ready(function () {
         });
     });
 });
-    $(document).ready(function () {
-        $('#loginForm').submit(function (event) {
-            event.preventDefault();
+    // $(document).ready(function () {
+    //     $('#loginForm').submit(function (event) {
+    //         event.preventDefault();
+    //
+    //         const email = $('#correo').val();
+    //         const password = $('#password').val();
+    //
+    //         fetch('http://localhost:8080/api/usuarios/login', {
+    //             method: 'POST',
+    //             headers: {
+    //                 'Content-Type': 'application/json'
+    //             },
+    //             body: JSON.stringify({ correo: email, password: password })
+    //         })
+    //             .then(response => {
+    //                 if (response.ok) {
+    //                     localStorage.setItem('userEmail', email);
+    //                     return response.json();
+    //                 } else {
+    //                     throw new Error('Login fallido');
+    //                 }
+    //             })
+    //             .then(data => {
+    //                 if (data.token) {
+    //                     localStorage.setItem('authToken', data.token); // Store the token
+    //                 } else {
+    //                     console.warn("No authToken received in the response");
+    //                 }
+    //                 window.location.href = '/';
+    //             })
+    //             .catch(error => {
+    //                 console.error('Error durante el login:', error);
+    //                 $('#error').text('Login fallido. Por favor, verifica tus credenciales.');
+    //             });
+    //     });
+    //
+    //     async function getUserDetails() {
+    //         const email = localStorage.getItem('userEmail');
+    //         const authToken = localStorage.getItem('authToken');
+    //         const userNameElement = $('#userName');
+    //         if (email && authToken) {
+    //             try {
+    //                 const response = await fetch(`http://localhost:8080/api/usuarios/email?email=${email}`, {
+    //                     headers: {
+    //                         'Authorization': `Bearer ${authToken}`
+    //                     }
+    //                 });
+    //
+    //                 if (response.ok) {
+    //                     const user = await response.json();
+    //                     userNameElement.text(user.nombre);
+    //                     $('#userMenu').hide();
+    //                 } else {
+    //                     console.error('Error al obtener los detalles del usuario');
+    //                     setLoginView();
+    //                 }
+    //             } catch (error) {
+    //                 console.error('Error fetching user details:', error);
+    //                 setLoginView();
+    //             }
+    //         } else {
+    //             setLoginView();
+    //         }
+    //     }
+    //
+    //     function setLoginView() {
+    //         $('#userName').text('Login');
+    //         $('#userMenu').hide();
+    //         $('#userButton').on('click', function () {
+    //             window.location.href = '/login';
+    //         });
+    //     }
+    //
+    //     getUserDetails();
+    //
+    //
+    //     $('#userMenu').find('[href="/logout"]').click(function (event) {
+    //         event.preventDefault();
+    //         localStorage.removeItem('userEmail');
+    //         localStorage.removeItem('authToken');
+    //         setLoginView();
+    //         window.location.href = '/login';
+    //     });
+    //
+    //     $('#userButton').click(function (event) {
+    //         event.stopPropagation();
+    //         $('#userMenu').toggle();
+    //     });
+    //
+    //     $(document).click(function (event) {
+    //         if (!$(event.target).closest('#userButton').length && !$(event.target).closest('#userMenu').length) {
+    //             $('#userMenu').hide();
+    //         }
+    //     });
+    //
+    //
+    //
+    // });
 
-            const email = $('#correo').val();
-            const password = $('#password').val();
-
-            fetch('http://localhost:8080/api/usuarios/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ correo: email, password: password })
-            })
-                .then(response => {
-                    if (response.ok) {
-                        localStorage.setItem('userEmail', email);
-                        return response.json();
-                    } else {
-                        throw new Error('Login fallido');
-                    }
-                })
-                .then(data => {
-                    if (data.token) {
-                        localStorage.setItem('authToken', data.token); // Store the token
-                    } else {
-                        console.warn("No authToken received in the response");
-                    }
-                    window.location.href = '/';
-                })
-                .catch(error => {
-                    console.error('Error durante el login:', error);
-                    $('#error').text('Login fallido. Por favor, verifica tus credenciales.');
-                });
-        });
-
-        async function getUserDetails() {
-            const email = localStorage.getItem('userEmail');
-            const authToken = localStorage.getItem('authToken');
-            const userNameElement = $('#userName');
-            if (email && authToken) {
-                try {
-                    const response = await fetch(`http://localhost:8080/api/usuarios/email?email=${email}`, {
-                        headers: {
-                            'Authorization': `Bearer ${authToken}`
-                        }
-                    });
-
-                    if (response.ok) {
-                        const user = await response.json();
-                        userNameElement.text(user.nombre);
-                        $('#userMenu').hide();
-                    } else {
-                        console.error('Error al obtener los detalles del usuario');
-                        setLoginView();
-                    }
-                } catch (error) {
-                    console.error('Error fetching user details:', error);
-                    setLoginView();
-                }
-            } else {
-                setLoginView();
-            }
-        }
-
-        function setLoginView() {
-            $('#userName').text('Login');
-            $('#userMenu').hide();
-            $('#userButton').on('click', function () {
-                window.location.href = '/login';
-            });
-        }
-
-        getUserDetails();
-
-
-        $('#userMenu').find('[href="/logout"]').click(function (event) {
-            event.preventDefault();
-            localStorage.removeItem('userEmail');
-            localStorage.removeItem('authToken');
-            setLoginView();
-            window.location.href = '/login';
-        });
-
-        $('#userButton').click(function (event) {
-            event.stopPropagation();
-            $('#userMenu').toggle();
-        });
-
-        $(document).click(function (event) {
-            if (!$(event.target).closest('#userButton').length && !$(event.target).closest('#userMenu').length) {
-                $('#userMenu').hide();
-            }
-        });
-
-
-
-    });
-
-function checkAuthenticated() {
-    const authToken = localStorage.getItem('authToken');
-    const userEmail = localStorage.getItem('userEmail');
-
-    if (!authToken || !userEmail) {
-        alert('Please log in to proceed to checkout.');
-        window.location.href = '/login';
-        return false;
-    }
-    return true;
-}
+// function checkAuthenticated() {
+//     const authToken = localStorage.getItem('authToken');
+//     const userEmail = localStorage.getItem('userEmail');
+//
+//     if (!authToken || !userEmail) {
+//         alert('Please log in to proceed to checkout.');
+//         window.location.href = '/login';
+//         return false;
+//     }
+//     return true;
+// }

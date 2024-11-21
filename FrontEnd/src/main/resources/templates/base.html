@@ -38,6 +38,9 @@
                     <li class="nav-item">
                         <a class="nav-link" th:href="@{/conocenos}">Conócenos</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/checkout}">Checkout</a>
+                    </li>
                 </ul>
 
                 <form class="d-flex ms-auto" role="search">
@@ -47,16 +50,17 @@
 
                 <ul class="nav justify-content-end">
                     <li class="nav-item dropdown">
-                        <button class="btn btn-secondary dropdown-toggle" type="button" id="userButton" data-bs-toggle="dropdown" aria-expanded="false">
-                            <span id="userName">Login</span>
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="userButton" data-bs-toggle="dropdown" aria-expanded="false" th:href="@{/login}">
+                            <span th:text="${userName != null ? userName : 'Login'}">Login</span>
                         </button>
-                        <ul class="dropdown-menu" id="userMenu" style="display: none;">
+                        <ul class="dropdown-menu" th:if="${userName != null}">
                             <li><a class="dropdown-item" href="#">Perfil</a></li>
-                            <li><a class="dropdown-item" href="#">Historial</a></li>
+                            <li><a class="dropdown-item" href="/historial">Historial</a></li>
                             <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="/logout">Logout</a></li>
+                            <li><a class="dropdown-item" th:href="@{/logout}">Logout</a></li>
                         </ul>
                     </li>
+
                     <li class="nav-item">
                         <a id="cart" class="nav-link btn btn-outline-light" th:href="@{/carrito}">
                             <i class="fa-solid fa-cart-shopping"></i>

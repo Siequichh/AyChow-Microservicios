@@ -12,13 +12,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/usuarios")
@@ -26,8 +27,6 @@ public class UsuarioController {
 
     @Autowired
     private UsuarioService usuarioService;
-
-    private static final Logger logger = LoggerFactory.getLogger(UsuarioController.class);
 
     @GetMapping
     public List<Usuario> getAllUsuarios() {
@@ -55,42 +54,29 @@ public class UsuarioController {
     }
 
     @GetMapping("/email")
+    @Transactional
     public Usuario getUsuarioByEmail(@RequestParam String email) {
         return usuarioService.getUsuarioByCorreo(email);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
-        try {
-            Usuario usuario = usuarioService.autenticarUsuario(loginRequest.getCorreo(), loginRequest.getPassword());
-
-            // Generate JWT token
-            String token = Jwts.builder()
-                    .setSubject(usuario.getCorreo())
-                    .setIssuedAt(new Date())
-                    .setExpiration(new Date(System.currentTimeMillis() + 3600000))
-                    .signWith(Keys.secretKeyFor(SignatureAlgorithm.HS256))
-                    .compact();
-
-            // Prepare the response with token
-            Map<String, Object> response = new HashMap<>();
-            response.put("token", token);
-            response.put("nombre", usuario.getNombre()); // Optional: send user's name
-
-            return ResponseEntity.ok(response);
-
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Correo o contraseña incorrectos");
-        }
+    @Transactional
+    public Usuario login(@RequestBody LoginRequest loginRequest) {
+            Usuario usuario= usuarioService.autenticarUsuario(loginRequest.getCorreo(), loginRequest.getPassword());
+            if (usuario != null) {
+                UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(
+                        usuario, null, Collections.singletonList(new SimpleGrantedAuthority(usuario.getRol().getNombreRol())));
+                SecurityContextHolder.getContext().setAuthentication(auth);
+            }
+        return usuario;
     }
 
 
     @GetMapping("/me")
     public ResponseEntity<Usuario> getCurrentUser(Authentication authentication) {
         if (authentication != null && authentication.isAuthenticated()) {
-            Usuario currentUser = (Usuario) authentication.getPrincipal(); // Cast or retrieve user details
-            logger.info("Usuario autenticado: {}", currentUser);
-            return ResponseEntity.ok(currentUser); } logger.warn("Usuario no autenticado");
+            Usuario currentUser = (Usuario) authentication.getPrincipal();
+            return ResponseEntity.ok(currentUser); }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 

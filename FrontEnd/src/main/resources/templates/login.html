@@ -24,9 +24,9 @@
         <h1 class="login-title mb-4">Iniciar Sesión de cliente</h1>
         <img th:src="@{/img/logoAyChow.jpeg}" alt="Logo" class="mb-4 logo-img">
 
-        <form id="loginForm" method="post">
+        <form th:action="@{/login}" method="post">
             <div class="form-group mb-3">
-                <input type="email" name="correo" id="correo"  class="form-control" placeholder="Correo electrónico" required>
+                <input type="email" name="username" id="correo"  class="form-control" placeholder="Correo electrónico" required>
             </div>
             <div class="form-group mb-3">
                 <input type="password" name="password" id="password"  class="form-control" placeholder="Contraseña" required>
@@ -35,7 +35,8 @@
         </form>
 
         <!-- Mostrar mensaje de error si existe -->
-        <p th:if="${error}" class="text-danger mt-2" th:text="${error}"></p>
+        <p th:if="${param.error}" class="text-danger mt-2">Credenciales incorrectas. Inténtalo de nuevo.</p>
+
 
         <!-- Fila de enlaces con flexbox -->
         <div class="d-flex justify-content-between mt-3">

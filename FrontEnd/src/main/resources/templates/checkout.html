@@ -184,15 +184,6 @@
   });
 
 
-    function checkAuthenticated() {
-      if (!localStorage.getItem('userEmail') || !localStorage.getItem('authToken')) {
-        alert('Please log in to proceed to checkout.');
-        window.location.href = '/login';
-        return false;
-      }
-      return true;
-    }
-
 
 </script>
 </body>
