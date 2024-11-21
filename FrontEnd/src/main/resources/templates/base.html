@@ -38,9 +38,6 @@
                     <li class="nav-item">
                         <a class="nav-link" th:href="@{/conocenos}">Conócenos</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" th:href="@{/checkout}">Checkout</a>
-                    </li>
                 </ul>
 
                 <form class="d-flex ms-auto" role="search">
@@ -50,16 +47,25 @@
 
                 <ul class="nav justify-content-end">
                     <li class="nav-item dropdown">
-                        <button class="btn btn-secondary dropdown-toggle" type="button" id="userButton" data-bs-toggle="dropdown" aria-expanded="false" th:href="@{/login}">
-                            <span th:text="${userName != null ? userName : 'Login'}">Login</span>
+                        <a class="btn btn-secondary" th:if="${userName == null}" th:href="@{/login}">
+                            Login
+                        </a>
+                        <button class="btn btn-secondary dropdown-toggle" th:if="${userName != null}" type="button" id="userButton" data-bs-toggle="dropdown" aria-expanded="false">
+                            <span th:text="${userName}"></span>
                         </button>
                         <ul class="dropdown-menu" th:if="${userName != null}">
                             <li><a class="dropdown-item" href="#">Perfil</a></li>
-                            <li><a class="dropdown-item" href="/historial">Historial</a></li>
+                            <li><a class="dropdown-item" th:href="@{/historial}">Historial</a></li>
                             <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" th:href="@{/logout}">Logout</a></li>
+                            <li>
+                            <form th:action="@{/logout}" method="post" style="display: none;" id="logoutForm">
+                                <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
+                            </form>
+                            <a class="dropdown-item" href="#" onclick="document.getElementById('logoutForm').submit();">Logout</a>
+                            </li>
                         </ul>
                     </li>
+
 
                     <li class="nav-item">
                         <a id="cart" class="nav-link btn btn-outline-light" th:href="@{/carrito}">
@@ -76,12 +82,11 @@
         </div>
     </nav>
 </header>
-<!-- Fragmento del Contenido Principal -->
+
 <main th:fragment="content" class="container mt-4">
 
 </main>
 
-<!-- Fragmento del Footer-->
 
 <footer th:fragment="footer" class="bg-dark text-light pt-4">
     <div class="container px-5">

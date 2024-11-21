@@ -6,7 +6,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -41,7 +41,11 @@ public class SecurityConfig {
                 .loginProcessingUrl("/login")
                 .defaultSuccessUrl("/", true)
                 .failureUrl("/login?error")
-                .permitAll()
+                .permitAll().successHandler((request, response, authentication) -> {
+                    CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+                    if (userDetails.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_Admin"))) {
+                        response.sendRedirect("/admin"); }
+                    else { response.sendRedirect("/"); } })
         )
                 .logout(logout -> logout
                         .logoutUrl("/logout")

@@ -15,10 +15,8 @@
 </head>
 <body>
 
-<!-- Header del base (importado con Thymeleaf) -->
 <div th:replace="~{base :: header}"></div>
 
-<!-- Contenedor de login centrado -->
 <div class="login-page">
     <div class="login-container text-center">
         <h1 class="login-title mb-4">Iniciar Sesión de cliente</h1>
@@ -34,11 +32,9 @@
             <button type="submit" class="btn btn-dark w-100">Iniciar Sesión</button>
         </form>
 
-        <!-- Mostrar mensaje de error si existe -->
         <p th:if="${param.error}" class="text-danger mt-2">Credenciales incorrectas. Inténtalo de nuevo.</p>
 
 
-        <!-- Fila de enlaces con flexbox -->
         <div class="d-flex justify-content-between mt-3">
             <a th:href="@{/registro}" class="text-primary">Registrarse</a>
             <a th:href="@{/restaurarContraseña}" class="text-danger">Me olvidé mi contraseña</a>
