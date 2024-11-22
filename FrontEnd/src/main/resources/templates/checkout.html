@@ -5,7 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Checkout - AYCHOW</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="icon" type="image/x-icon" th:href="@{/img/logoAyChow.jpeg}">
+  <link rel="stylesheet" th:href="@{/css/basestyles.css}">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js" crossorigin="anonymous"></script>
+  <script th:src="@{/js/scriptjs.js}"></script>
   <style>
     .checkout-container {
       display: flex;
@@ -47,7 +51,6 @@
 <body>
 <!-- Header personalizado -->
 <div th:replace="~{base :: header}"></div>
-
 <!-- Checkout container -->
 <div class="container mt-5 checkout-container">
   <!-- Formulario de entrega -->
@@ -121,9 +124,7 @@
   </div>
 </div>
 
-<!-- Footer personalizado -->
 <div th:replace="~{base :: footer}"></div>
-
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
 <script th:src="@{/js/scriptjs.js}"></script>
@@ -179,9 +180,11 @@
       alert('No hay productos en el carrito para procesar.');
     } else {
       alert('Pedido realizado con éxito.');
-      // Aquí puedes procesar el pedido o redirigir a una página de confirmación
     }
   });
+
+
+
 </script>
 </body>
 </html>

@@ -5,7 +5,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.reactive.function.client.WebClient;
-
 import java.util.List;
 
 @Controller
@@ -40,7 +39,17 @@ public class HomeController {
         return "index";
     }
 
-    @GetMapping("/AyChow/productos")
+        @GetMapping("/checkout")
+        public String checkout() {
+            return "checkout";
+        }
+
+
+    @GetMapping("/upload")
+    public String subida() {
+        return "upload";
+    }
+    @GetMapping("/admin")
     public String productosAdmin(Model model) {
         List<Producto> productos = webClientBuilder.build()
                 .get()
@@ -53,21 +62,11 @@ public class HomeController {
         return "productosAdmin";
     }
 
-
-    @GetMapping("/upload")
-    public String subida() {
-        return "upload";
-    }
-
     @GetMapping("/tienda")
     public String tienda() {
         return "tienda";
     }
 
-    @GetMapping("/checkout")
-    public String checkout() {
-        return "checkout";
-    }
 
     @GetMapping("/favoritos")
     public String favoritos() {

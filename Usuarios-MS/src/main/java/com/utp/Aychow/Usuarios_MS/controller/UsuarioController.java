@@ -4,16 +4,22 @@ import com.utp.Aychow.Usuarios_MS.entity.Usuario;
 import com.utp.Aychow.Usuarios_MS.request.LoginRequest;
 import com.utp.Aychow.Usuarios_MS.request.UsuarioRequest;
 import com.utp.Aychow.Usuarios_MS.service.UsuarioService;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/usuarios")
@@ -21,8 +27,6 @@ public class UsuarioController {
 
     @Autowired
     private UsuarioService usuarioService;
-
-
 
     @GetMapping
     public List<Usuario> getAllUsuarios() {
@@ -49,15 +53,33 @@ public class UsuarioController {
         usuarioService.eliminarUsuario(id);
     }
 
+    @GetMapping("/email")
+    @Transactional
+    public Usuario getUsuarioByEmail(@RequestParam String email) {
+        return usuarioService.getUsuarioByCorreo(email);
+    }
+
     @PostMapping("/login")
-    public ResponseEntity<Usuario> login(@RequestBody LoginRequest loginRequest) {
-        try {
-            Usuario usuario = usuarioService.autenticarUsuario(loginRequest.getCorreo(), loginRequest.getPassword());
-            return ResponseEntity.ok(usuario);
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
+    @Transactional
+    public Usuario login(@RequestBody LoginRequest loginRequest) {
+            Usuario usuario= usuarioService.autenticarUsuario(loginRequest.getCorreo(), loginRequest.getPassword());
+            if (usuario != null) {
+                UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(
+                        usuario, null, Collections.singletonList(new SimpleGrantedAuthority(usuario.getRol().getNombreRol())));
+                SecurityContextHolder.getContext().setAuthentication(auth);
+            }
+        return usuario;
+    }
+
+
+    @GetMapping("/me")
+    public ResponseEntity<Usuario> getCurrentUser(Authentication authentication) {
+        if (authentication != null && authentication.isAuthenticated()) {
+            Usuario currentUser = (Usuario) authentication.getPrincipal();
+            return ResponseEntity.ok(currentUser); }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 
 
 }
+

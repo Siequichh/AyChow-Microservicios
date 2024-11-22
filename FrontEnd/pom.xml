@@ -86,7 +86,11 @@
 			<groupId>org.thymeleaf.extras</groupId>
 			<artifactId>thymeleaf-extras-springsecurity6</artifactId>
 		</dependency>
-	</dependencies>
+        <dependency>
+            <groupId>jakarta.transaction</groupId>
+            <artifactId>jakarta.transaction-api</artifactId>
+        </dependency>
+    </dependencies>
 
 
 	<build>

@@ -1,12 +1,12 @@
 package com.utp.Aychow.Usuarios_MS.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Data;
+
+import lombok.*;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 
-@Data
+@Getter
+@Setter
 @Entity
 public class Usuario {
     @Id
@@ -27,8 +27,7 @@ public class Usuario {
     private String direccion;
     private String telefono;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "idRol", nullable = false)
-    @JsonBackReference
     private Rol rol;
 }
