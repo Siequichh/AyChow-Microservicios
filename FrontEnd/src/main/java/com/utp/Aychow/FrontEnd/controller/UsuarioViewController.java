@@ -4,7 +4,7 @@ package com.utp.Aychow.FrontEnd.controller;
 import com.utp.Aychow.FrontEnd.model.LoginRequest;
 import com.utp.Aychow.FrontEnd.model.Usuario;
 import com.utp.Aychow.FrontEnd.model.UsuarioRequest;
-import jakarta.transaction.Transactional;
+//import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,7 +35,7 @@ public class UsuarioViewController {
                 .collectList()
                 .block();
         model.addAttribute("usuarios", usuarios);
-        return "usuarios/listaUsuarios"; // no esta la vista
+        return "UsuariosAdmin";
     }
 
 

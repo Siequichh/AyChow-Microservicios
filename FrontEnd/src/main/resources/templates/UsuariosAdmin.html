@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org/">
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" />
+        
+        <title>Dasboard Aychow</title>
+
+        <!-- Custom fonts for this template-->
+        <link  href="vendor/fontawesome-free/css/all.min.css"  rel="stylesheet"  type="text/css" />
+        <link  href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"  rel="stylesheet" />
+        <link rel="stylesheet" th:href="@{/css/sb-admin-2.min.css}">
+        <!-- Custom styles for this template-->
+        <link href="css/sb-admin-2.min.css" rel="stylesheet" />
+    </head>
+
+    <body id="page-top">
+        <!-- Page Wrapper -->
+        <div id="wrapper">
+            <!-- Sidebar -->
+            <ul
+                class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion"
+                id="accordionSidebar"
+            >
+                <!-- Sidebar - Brand -->
+                <a
+                    class="sidebar-brand d-flex align-items-center justify-content-center"
+                    href="index.html"
+                >
+                    
+                    <div class="sidebar-brand-text mx-3">
+                        AyChow <sup>2</sup>
+                    </div>
+                </a>
+
+                <!-- Divider -->
+                <hr class="sidebar-divider my-0" />
+
+                <!-- Nav Item - Dashboard -->
+                <li class="nav-item active">
+                    <a class="nav-link" href="index.html">
+                        
+                        <span>Dashboard</span></a
+                    >
+                </li>
+
+                <!-- Divider -->
+                <hr class="sidebar-divider" />
+                <li class="nav-item active">
+                    <a class="nav-link" th:href="@{/admin}">
+                        
+                        <span>Productos</span></a
+                    >
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" th:href="@{/usuarios}">
+
+                        <span>Usarios</span></a
+                    >
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="index.html">
+
+                        <span>Venta</span></a
+                    >
+                </li>
+
+                
+                
+            </ul>
+            
+
+            <!-- Content Wrapper -->
+            <div id="content-wrapper" class="d-flex flex-column">
+                <!-- Main Content -->
+                <div id="content">
+                    <nav
+                        class="navbar navbar-expand navbar-light bg-white topbar mb-3 static-top shadow"
+                    >
+
+                       
+                        <ul class="navbar-nav ml-auto">
+                            
+
+                            <div class="topbar-divider d-none d-sm-block"></div>
+
+                            <!-- Nav Item - User Information -->
+
+                                <li class="nav-item dropdown">
+                                    <a class="btn btn-secondary" th:if="${userName == null}" th:href="@{/login}">
+                                        Login
+                                    </a>
+                                    <button class="btn btn-secondary dropdown-toggle" th:if="${userName != null}" type="button" id="userButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <span th:text="${userName}"></span>
+                                    </button>
+                                    <ul class="dropdown-menu" th:if="${userName != null}">
+                                        <li><a class="dropdown-item" href="#">Perfil</a></li>
+                                        <li><a class="dropdown-item" th:href="@{/historial}">Historial</a></li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li>
+                                            <form th:action="@{/logout}" method="post" style="display: none;" id="logoutForm">
+                                                <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
+                                            </form>
+                                            <a class="dropdown-item" href="#" onclick="document.getElementById('logoutForm').submit();">Logout</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                        </ul>
+                    </nav>
+
+
+                    <section class="mx-4">
+
+                        <h1 class="text-center">Usuarios</h1>
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>DNI</th>
+                                    <th>Nombre</th>
+                                    <th>Apellido</th>
+                                    <th>Correo</th>
+                                    <th>Dirección</th>
+                                    <th>Teléfono</th>
+                                </tr>
+                                </thead>
+                                <tbody id="usuarios-body">
+                                <!-- Las filas serán agregadas dinámicamente -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+        <script>
+
+
+            document.addEventListener("DOMContentLoaded", () => {
+    const usuariosBody = document.getElementById("usuarios-body");
+
+    // URL del endpoint
+    const API_URL = "http://localhost:8080/api/usuarios";
+
+    // Función para cargar usuarios
+    const cargarUsuarios = async () => {
+        try {
+            const response = await fetch(API_URL);
+
+            if (!response.ok) {
+                throw new Error("Error al obtener los usuarios");
+            }
+
+            const usuarios = await response.json();
+
+            // Limpiar el cuerpo de la tabla
+            usuariosBody.innerHTML = "";
+
+            // Agregar las filas con los datos
+            usuarios.forEach(usuario => {
+                const fila = document.createElement("tr");
+
+                fila.innerHTML = `
+                    <td>${usuario.idUsuario}</td>
+                    <td>${usuario.dni}</td>
+                    <td>${usuario.nombre}</td>
+                    <td>${usuario.apellido}</td>
+                    <td>${usuario.correo}</td>
+                    <td>${usuario.direccion}</td>
+                    <td>${usuario.telefono}</td>
+                `;
+
+                usuariosBody.appendChild(fila);
+            });
+        } catch (error) {
+            console.error("Error al cargar usuarios:", error);
+            usuariosBody.innerHTML = `
+                <tr>
+                    <td colspan="7" style="text-align: center; color: red;">Error al cargar usuarios.</td>
+                </tr>
+            `;
+        }
+    };
+
+    // Cargar usuarios al iniciar la página
+    cargarUsuarios();
+});
+        </script>
+    </body>
+</html>

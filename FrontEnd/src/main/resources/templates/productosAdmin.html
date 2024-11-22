@@ -12,7 +12,7 @@
         <link  href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"  rel="stylesheet" />
         <link rel="stylesheet" th:href="@{/css/sb-admin-2.min.css}">
         <!-- Custom styles for this template-->
-        <link href="css/sb-admin-2.min.css" rel="stylesheet" />
+
     </head>
 
     <body id="page-top">
@@ -48,14 +48,14 @@
                 <!-- Divider -->
                 <hr class="sidebar-divider" />
                 <li class="nav-item active">
-                    <a class="nav-link" href="index.html">
-                        
-                        <span>Productosl</span></a
+                    <a class="nav-link" th:href="@{/admin}">
+
+                        <span>Productos</span></a
                     >
                 </li>
                 <li class="nav-item active">
-                    <a class="nav-link" href="index.html">
-                        
+                    <a class="nav-link" th:href="@{/usuarios}">
+
                         <span>Usarios</span></a
                     >
                 </li>
@@ -79,52 +79,36 @@
                         class="navbar navbar-expand navbar-light bg-white topbar mb-3 static-top shadow"
                     >
 
-                       
+
                         <ul class="navbar-nav ml-auto">
-                            
+
 
                             <div class="topbar-divider d-none d-sm-block"></div>
 
                             <!-- Nav Item - User Information -->
-                            <li class="nav-item dropdown no-arrow">
-                                <a
-                                    class="nav-link dropdown-toggle"
-                                    href="#"
-                                    id="userDropdown"
-                                    role="button"
-                                    data-toggle="dropdown"
-                                    aria-haspopup="true"
-                                    aria-expanded="false"
-                                >
-                                    <span
-                                        class="mr-2 d-none d-lg-inline text-gray-600 small"
-                                        >Douglas McGee</span
-                                    >
-                                    
+
+                            <li class="nav-item dropdown">
+                                <a class="btn btn-secondary" th:if="${userName == null}" th:href="@{/login}">
+                                    Login
                                 </a>
-                                <!-- Dropdown - User Information -->
-                                
+                                <button class="btn btn-secondary dropdown-toggle" th:if="${userName != null}" type="button" id="userButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <span th:text="${userName}"></span>
+                                </button>
+                                <ul class="dropdown-menu" th:if="${userName != null}">
+                                    <li><a class="dropdown-item" href="#">Perfil</a></li>
+                                    <li><a class="dropdown-item" th:href="@{/historial}">Historial</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li>
+                                        <form th:action="@{/logout}" method="post" style="display: none;" id="logoutForm">
+                                            <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
+                                        </form>
+                                        <a class="dropdown-item" href="#" onclick="document.getElementById('logoutForm').submit();">Logout</a>
+                                    </li>
+                                </ul>
                             </li>
                         </ul>
                     </nav>
-                    <!-- End of Topbar -->
 
-                    <!-- Begin Page Content -->
-                    <div class="container-fluid">
-                        <!-- Page Heading -->
-                        <div
-                            class="d-sm-flex align-items-center justify-content-end"
-                        >                           
-                            <a
-                                href="#"
-                                class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"
-                                ><i
-                                    class="fas fa-download fa-sm text-white-50"
-                                ></i>
-                                Generate Report</a
-                            >
-                        </div>
-                    </div>    
 
                     <section class="mx-4">
                         <div>
