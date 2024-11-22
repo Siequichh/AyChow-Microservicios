@@ -12,5 +12,5 @@ public class Usuario {
     private String password;
     private String direccion;
     private String telefono;
-    private int idRol;
+    private Rol rol;
 }

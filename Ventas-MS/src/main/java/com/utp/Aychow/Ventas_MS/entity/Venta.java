@@ -1,19 +1,15 @@
 package com.utp.Aychow.Ventas_MS.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 import jakarta.persistence.*;
-import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.util.List;
 
+@Getter
+@Setter
 @Entity
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
 public class Venta {
 
     @Id
@@ -30,5 +26,6 @@ public class Venta {
     private float total;
 
     @OneToMany(mappedBy = "venta", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<DetalleVenta> detalles;
 }

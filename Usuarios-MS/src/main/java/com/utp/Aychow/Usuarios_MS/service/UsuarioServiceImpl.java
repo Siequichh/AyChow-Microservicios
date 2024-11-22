@@ -33,15 +33,18 @@ public class UsuarioServiceImpl implements UsuarioService {
     }
 
     @Override
+    @Transactional
     public Usuario getUsuarioById(Long id) {
         return usuarioDAO.findById(id).orElse(null);
     }
 
     @Override
+    @Transactional
     public List<Usuario> getUsuariosByNombre(String nombre) {
         return usuarioDAO.findByNombre(nombre);
     }
     @Override
+    @Transactional
     public Usuario getUsuarioByCorreo(String correo) {
         return usuarioDAO.findByCorreo(correo);
     }
@@ -72,18 +75,36 @@ public class UsuarioServiceImpl implements UsuarioService {
     public Usuario editarUsuario(Long id, UsuarioRequest usuarioRequest) {
         Usuario usuario = usuarioDAO.findById(id).orElse(null);
         if (usuario != null) {
-            usuario.setDni(usuarioRequest.getDni());
-            usuario.setNombre(usuarioRequest.getNombre());
-            usuario.setApellido(usuarioRequest.getApellido());
-            usuario.setCorreo(usuarioRequest.getCorreo());
-            usuario.setPassword(passwordEncoder.encode(usuarioRequest.getPassword()));
-            usuario.setDireccion(usuarioRequest.getDireccion());
-            usuario.setTelefono(usuarioRequest.getTelefono());
-            usuario.setRol(rolDAO.findById(usuarioRequest.getIdRol()).orElse(null));
+            if (usuarioRequest.getDni() != null) {
+                usuario.setDni(usuarioRequest.getDni());
+            }
+            if (usuarioRequest.getNombre() != null) {
+                usuario.setNombre(usuarioRequest.getNombre());
+            }
+            if (usuarioRequest.getApellido() != null) {
+                usuario.setApellido(usuarioRequest.getApellido());
+            }
+            if (usuarioRequest.getCorreo() != null) {
+                usuario.setCorreo(usuarioRequest.getCorreo());
+            }
+            if (usuarioRequest.getPassword() != null) {
+                usuario.setPassword(passwordEncoder.encode(usuarioRequest.getPassword()));
+            }
+            if (usuarioRequest.getDireccion() != null) {
+                usuario.setDireccion(usuarioRequest.getDireccion());
+            }
+            if (usuarioRequest.getTelefono() != null) {
+                usuario.setTelefono(usuarioRequest.getTelefono());
+            }
+            if (usuarioRequest.getIdRol() != null) {
+                usuario.setRol(rolDAO.findById(usuarioRequest.getIdRol()).orElse(null));
+            }
             return usuarioDAO.save(usuario);
         }
         return null;
     }
+
+
 
     @Override
     @Transactional
@@ -96,12 +117,18 @@ public class UsuarioServiceImpl implements UsuarioService {
     }
 
     @Override
+    @Transactional
     public Usuario autenticarUsuario(String correo, String password) {
         Usuario usuario = usuarioDAO.findByCorreo(correo);
         if (usuario != null && passwordEncoder.matches(password, usuario.getPassword())) {
             return usuario;
         }
         throw new RuntimeException("Correo o contraseña incorrectos");
+    }
+
+    @Override
+    public  List<Usuario> getUsuariosByRol(Rol idRol) {
+        return usuarioDAO.findByRol(idRol);
     }
 
 

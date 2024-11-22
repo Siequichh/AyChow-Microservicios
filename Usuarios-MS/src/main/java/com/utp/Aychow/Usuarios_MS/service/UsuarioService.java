@@ -1,5 +1,6 @@
 package com.utp.Aychow.Usuarios_MS.service;
 
+import com.utp.Aychow.Usuarios_MS.entity.Rol;
 import com.utp.Aychow.Usuarios_MS.entity.Usuario;
 import com.utp.Aychow.Usuarios_MS.request.UsuarioRequest;
 
@@ -14,4 +15,5 @@ public interface UsuarioService {
     Usuario editarUsuario(Long id, UsuarioRequest usuarioRequest);
     void eliminarUsuario(Long id);
     Usuario autenticarUsuario(String correo, String password);
+    List<Usuario> getUsuariosByRol(Rol idRol);
 }

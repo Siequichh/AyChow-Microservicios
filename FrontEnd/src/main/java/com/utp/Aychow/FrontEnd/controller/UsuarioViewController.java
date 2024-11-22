@@ -1,10 +1,14 @@
 package com.utp.Aychow.FrontEnd.controller;
 
 
-import com.utp.Aychow.FrontEnd.model.LoginRequest;
+import com.utp.Aychow.FrontEnd.model.Rol;
 import com.utp.Aychow.FrontEnd.model.Usuario;
 import com.utp.Aychow.FrontEnd.model.UsuarioRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +24,7 @@ public class UsuarioViewController {
 
     @Autowired
     private WebClient.Builder webClientBuilder;
+
 
 
     @GetMapping
@@ -92,23 +97,10 @@ public class UsuarioViewController {
     }
 
 
-    @PostMapping("/login")
-    public String login(@ModelAttribute LoginRequest loginRequest, Model model) {
-        Usuario usuario = webClientBuilder.build()
-                .post()
-                .uri("http://api-gateway/api/usuarios/login")
-                .bodyValue(loginRequest)
-                .retrieve()
-                .bodyToMono(Usuario.class)
-                .onErrorResume(e -> Mono.empty())
-                .block();
-
-        if (usuario != null) {
-            model.addAttribute("usuario", usuario);
-            return "redirect:/";
-        } else {
-            model.addAttribute("error", "Credenciales incorrectas");
-            return "login";
-        }
-    }
 }
+
+
+
+
+
+
