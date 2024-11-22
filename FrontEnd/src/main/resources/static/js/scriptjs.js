@@ -45,43 +45,61 @@ document.addEventListener('DOMContentLoaded', function () {
 
 $(document).ready(function () {
 
+    // Función para renderizar productos
+    function renderProductos(productos) {
+        $('#productos-list').empty(); // Limpiar el contenedor
+        productos.forEach(function (producto) {
+            let productCard = `
+                <div class="col mb-5" data-marca="${producto.marca}">
+                    <div class="card h-100">
+                        <img class="card-img-top" src="http://localhost:8080/api/productos/imagen/${producto.idProducto}" alt="${producto.nombre}" />
+                        <div class="card-body p-4">
+                            <div class="text-center">
+                                <h5 class="fw-bolder">${producto.nombre}</h5>
+                                <p>${producto.detalle}</p>
+                                <p class="h4">S/. ${producto.precio}</p>
+                            </div>
+                        </div>
+                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                            <div class="text-center">
+                                <button type="button" class="btn btn-outline-dark mt-auto add-to-cart-btn" data-id="${producto.idProducto}">Agregar</button>
+                                <a class="btn btn-outline-secondary mt-auto" href="/productos/detalles/${producto.idProducto}">Detalles</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            $('#productos-list').append(productCard);
+        });
+    }
+
+
+    $.ajax({
+        url: 'http://localhost:8080/api/productos', // URL completa del backend
+        type: 'GET',
+        success: function (response) {
+            console.log('Productos cargados:', response);
+            renderProductos(response); // Renderizar productos en la página
+        },
+        error: function (err) {
+            console.error('Error al cargar todos los productos:', err);
+        }
+    });
+
+
     $('.filter-btn').click(function () {
         let marcaSeleccionada = $(this).data('marca');
 
         $.ajax({
             url: '/productos/por-marca',
             type: 'GET',
-            data: {marca: marcaSeleccionada},
+            data: { marca: marcaSeleccionada },
             success: function (response) {
-                console.log(response);
-                $('#productos-list').empty();
-
-                response.forEach(function (producto) {
-                    let productCard = `
-                        <div class="col mb-5" data-marca="${producto.marca}">
-                            <div class="card h-100">
-                                <img class="card-img-top" src="http://localhost:8080/api/productos/imagen/${producto.idProducto}" alt="${producto.nombre}" />
-                                <div class="card-body p-4">
-                                    <div class="text-center">
-                                        <h5 class="fw-bolder">${producto.nombre}</h5>
-                                        <p>${producto.detalle}</p>
-                                        <p class="h4">S/. ${producto.precio}</p>
-                                    </div>
-                                </div>
-                                <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                                    <div class="text-center">
-                                        <button type="button" class="btn btn-outline-dark mt-auto add-to-cart-btn" data-id="${producto.idProducto}">Agregar</button>
-                                        <a class="btn btn-outline-secondary mt-auto" href="/productos/detalles/${producto.idProducto}">Detalles</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                    $('#productos-list').append(productCard);
-                });
+                console.log('Productos filtrados:', response);
+                renderProductos(response);
             },
             error: function (err) {
-                console.error('Error al obtener productos:', err);
+                console.error('Error al obtener productos por marca:', err);
             }
         });
     });
