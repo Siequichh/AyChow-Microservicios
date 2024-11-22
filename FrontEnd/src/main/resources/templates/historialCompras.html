@@ -25,11 +25,12 @@
       </thead>
       <tbody>
       <tr th:each="venta : ${compras}">
-        <td th:text="${venta.getIdVenta()}"></td>
-        <td th:text="${venta.getFecha()}"></td>
-        <td th:text="${#numbers.formatDecimal(venta.total, 2, 2, 'POINT')}">
+        <td th:text="${venta.idVenta}"></td>
+        <td th:text="${venta.fecha}"></td>
+        <td th:text="${#numbers.formatDecimal(venta.total, 2, 2, 'POINT')}"></td>
         <td>
-          <form th:action="@{'/ventas/pdf/' + ${venta.getIdVenta()}}" method="get">
+          <form th:action="@{'http://localhost:8080/api/ventas/pdf/' + ${venta.idVenta}}" method="get">
+            <input type="hidden" name="idUsuario" th:value="${venta.idUsuario}"/>
             <button type="submit" class="btn btn-primary btn-sm">
               Generar PDF
             </button>

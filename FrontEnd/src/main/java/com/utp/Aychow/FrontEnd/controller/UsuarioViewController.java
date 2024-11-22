@@ -1,14 +1,15 @@
 package com.utp.Aychow.FrontEnd.controller;
 
 
-import com.utp.Aychow.FrontEnd.model.Rol;
+//import com.utp.Aychow.FrontEnd.model.Rol;
 import com.utp.Aychow.FrontEnd.model.Usuario;
 import com.utp.Aychow.FrontEnd.model.UsuarioRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
+/*import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.ResponseEntity;*/
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -37,7 +38,7 @@ public class UsuarioViewController {
                 .collectList()
                 .block();
         model.addAttribute("usuarios", usuarios);
-        return "usuarios/listaUsuarios"; // no esta la vista
+        return "UsuariosAdmin";
     }
 
 
