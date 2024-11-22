@@ -3,6 +3,7 @@ package com.utp.Aychow.FrontEnd.controller;
 import com.utp.Aychow.FrontEnd.model.Producto;
 import com.utp.Aychow.FrontEnd.model.Usuario;
 import com.utp.Aychow.FrontEnd.model.UsuarioRequest;
+import com.utp.Aychow.FrontEnd.model.Venta;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -170,7 +171,15 @@ public class HomeController {
                 .uri("http://api-gateway/api/usuarios/email?email=" + principal.getName())
                 .retrieve() .bodyToMono(Usuario.class)
                 .block();
-        model.addAttribute("usuario", usuario);
+        Long idUsuario = usuario.getIdUsuario();
+
+        List<Venta> ventas = webClientBuilder.build()
+                .get()
+                .uri("http://api-gateway/api/ventas/usuario/" + idUsuario)
+                .retrieve() .bodyToFlux(Venta.class)
+                .collectList() .block();
+
+        model.addAttribute("compras", ventas);
         return "historialCompras";
     }
 }
