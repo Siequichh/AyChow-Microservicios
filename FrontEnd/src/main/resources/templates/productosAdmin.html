@@ -174,84 +174,8 @@
                             </table>
                         </div>
                     </section>
-
-                       
-
-                
-            </div>
-            <!-- End of Content Wrapper -->
-        </div>
-        <!-- End of Page Wrapper -->
-
-            <div class="modal fade" id="productoModal" tabindex="-1" aria-labelledby="productoModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                    <form th:action="@{/productos/guardar}" method="post" enctype="multipart/form-data" id="productoForm">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="productoModalLabel">Producto</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                <input type="hidden" id="idProducto" name="idProducto">
-
-                                <div class="mb-3">
-                                    <label for="nombre" class="form-label">Nombre:</label>
-                                    <input type="text" id="nombre" name="nombre" class="form-control" required>
-                                </div>
-
-                                <div class="mb-3">
-                                    <label for="marca" class="form-label">Marca:</label>
-                                    <input type="text" id="marca" name="marca" class="form-control" required>
-                                </div>
-
-                                <div class="mb-3">
-                                    <label for="precio" class="form-label">Precio:</label>
-                                    <input type="number" id="precio" name="precio" class="form-control" required>
-                                </div>
-
-                                <div class="mb-3">
-                                    <label for="cantidad" class="form-label">Cantidad:</label>
-                                    <input type="number" id="cantidad" name="cantidad" class="form-control" required>
-                                </div>
-
-                                <div class="mb-3">
-                                    <label for="detalle" class="form-label">Detalle:</label>
-                                    <textarea id="detalle" name="detalle" class="form-control" required></textarea>
-                                </div>
-
-                                <div class="mb-3">
-                                    <label for="rating" class="form-label">Rating:</label>
-                                    <input type="number" step="0.1" id="rating" name="rating" class="form-control" required>
-                                </div>
-
-                                <div class="mb-3">
-                                    <label for="imagen" class="form-label">Imagen:</label>
-                                    <input type="file" id="imagen" name="imagen" class="form-control">
-                                    <small class="form-text text-muted">Deja este campo vacío si no deseas cambiar la imagen.</small>
-                                </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                                <button type="submit" class="btn btn-primary">Guardar</button>
-                            </div>
-                        </div>
-                    </form>
                 </div>
             </div>
-
-
-
-
-        <!-- Core plugin JavaScript-->
-        <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
-
-
-        <script src="js/sb-admin-2.min.js"></script>
-
-
-
-        <!-- Page level custom scripts -->
-        <script src="js/demo/chart-area-demo.js"></script>
-        <script src="js/demo/chart-pie-demo.js"></script>
+        </div>
     </body>
 </html>
