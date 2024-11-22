@@ -10,34 +10,39 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-<header>
-  <h1>Historial de Compras</h1>
-</header>
+<div th:replace="~{base :: header}"></div>
+<main class="container mt-4">
+  <h1 class="mb-4">Historial de Compras</h1>
+  <div class="table-responsive">
+    <table class="table table-striped">
+      <thead class="table-dark">
+      <tr>
+        <th>ID de Compra</th>
+        <th>Fecha</th>
+        <th>Total Pagado</th>
+        <th>Acciones</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="venta : ${compras}">
+        <td th:text="${venta.getIdVenta()}"></td>
+        <td th:text="${venta.getFecha()}"></td>
+        <td th:text="${#numbers.formatDecimal(venta.total, 2, 2, 'POINT')}">
+        <td>
+          <form th:action="@{'/ventas/pdf/' + ${venta.getIdVenta()}}" method="get">
+            <button type="submit" class="btn btn-primary btn-sm">
+              Generar PDF
+            </button>
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</main>
 
-<section class="historial-compras">
-  <table>
-    <thead>
-    <tr>
-      <th>ID de Compra</th>
-      <th>Fecha</th>
-      <th>Total Pagado</th>
-      <th>Acciones</th>
-    </tr>
-    </thead>
-    <tbody>
-    <!-- Iterar sobre la lista de compras obtenida del backend -->
-    <tr th:each="venta : ${compras}">
-      <td th:text="${venta.idVenta}"></td>
-      <td th:text="${venta.fecha}"></td>
-      <td th:text="${#numbers.formatDecimal(venta.total, 2, 'COMMA', 'POINT')}"></td>
-      <td>
-        <form th:action="@{'/ventas/pdf/' + ${venta.idVenta}}" method="get">
-          <button type="submit" class="btn btn-primary">Generar PDF</button>
-        </form>
-      </td>
-    </tr>
-    </tbody>
-  </table>
-</section>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" crossorigin="anonymous"></script>
+<script th:src="@{/js/scriptjs.js}"></script>
 </body>
 </html>

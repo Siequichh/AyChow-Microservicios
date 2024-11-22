@@ -1,16 +1,11 @@
 package com.utp.Aychow.Ventas_MS.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 import jakarta.persistence.*;
-import lombok.NoArgsConstructor;
 
+@Getter
+@Setter
 @Entity
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
 public class DetalleVenta {
 
     @Id
