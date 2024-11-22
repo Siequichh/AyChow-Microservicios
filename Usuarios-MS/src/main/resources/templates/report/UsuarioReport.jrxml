@@ -1,0 +1,120 @@
+<!-- Created with Jaspersoft Studio version 7.0.1.final using JasperReports Library version 7.0.1-573496633c2b4074e32f433154b543003f7d2498  -->
+<jasperReport name="Blank_A4" language="java" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="201e7573-0623-497d-a36e-4912b02d4894">
+    <property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+    <property name="com.jaspersoft.studio.data.defaultdataadapter" value="aychow_Usuarios"/>
+    <parameter name="idRol" class="java.lang.Long"/>
+    <query language="SQL"><![CDATA[SELECT * FROM usuario WHERE id_rol =  $P!{idRol}]]></query>
+    <field name="id_usuario" class="java.lang.Long">
+        <property name="com.jaspersoft.studio.field.name" value="id_usuario"/>
+        <property name="com.jaspersoft.studio.field.label" value="id_usuario"/>
+        <property name="com.jaspersoft.studio.field.tree.path" value="usuario"/>
+    </field>
+    <field name="apellido" class="java.lang.String">
+        <property name="com.jaspersoft.studio.field.name" value="apellido"/>
+        <property name="com.jaspersoft.studio.field.label" value="apellido"/>
+        <property name="com.jaspersoft.studio.field.tree.path" value="usuario"/>
+    </field>
+    <field name="correo" class="java.lang.String">
+        <property name="com.jaspersoft.studio.field.name" value="correo"/>
+        <property name="com.jaspersoft.studio.field.label" value="correo"/>
+        <property name="com.jaspersoft.studio.field.tree.path" value="usuario"/>
+    </field>
+    <field name="direccion" class="java.lang.String">
+        <property name="com.jaspersoft.studio.field.name" value="direccion"/>
+        <property name="com.jaspersoft.studio.field.label" value="direccion"/>
+        <property name="com.jaspersoft.studio.field.tree.path" value="usuario"/>
+    </field>
+    <field name="dni" class="java.lang.String">
+        <property name="com.jaspersoft.studio.field.name" value="dni"/>
+        <property name="com.jaspersoft.studio.field.label" value="dni"/>
+        <property name="com.jaspersoft.studio.field.tree.path" value="usuario"/>
+    </field>
+    <field name="fecha_de_registro" class="java.sql.Date">
+        <property name="com.jaspersoft.studio.field.name" value="fecha_de_registro"/>
+        <property name="com.jaspersoft.studio.field.label" value="fecha_de_registro"/>
+        <property name="com.jaspersoft.studio.field.tree.path" value="usuario"/>
+    </field>
+    <field name="nombre" class="java.lang.String">
+        <property name="com.jaspersoft.studio.field.name" value="nombre"/>
+        <property name="com.jaspersoft.studio.field.label" value="nombre"/>
+        <property name="com.jaspersoft.studio.field.tree.path" value="usuario"/>
+    </field>
+    <field name="password" class="java.lang.String">
+        <property name="com.jaspersoft.studio.field.name" value="password"/>
+        <property name="com.jaspersoft.studio.field.label" value="password"/>
+        <property name="com.jaspersoft.studio.field.tree.path" value="usuario"/>
+    </field>
+    <field name="telefono" class="java.lang.String">
+        <property name="com.jaspersoft.studio.field.name" value="telefono"/>
+        <property name="com.jaspersoft.studio.field.label" value="telefono"/>
+        <property name="com.jaspersoft.studio.field.tree.path" value="usuario"/>
+    </field>
+    <field name="id_rol" class="java.lang.Long">
+        <property name="com.jaspersoft.studio.field.name" value="id_rol"/>
+        <property name="com.jaspersoft.studio.field.label" value="id_rol"/>
+        <property name="com.jaspersoft.studio.field.tree.path" value="usuario"/>
+    </field>
+    <background splitType="Stretch"/>
+    <title height="114" splitType="Stretch">
+        <element kind="staticText" uuid="13d2989f-fcfd-4fd4-abaf-a872f69a164b" x="140" y="10" width="290" height="40" fontSize="22.0">
+            <text><![CDATA[LISTA DE CLIENTES]]></text>
+        </element>
+        <element kind="textField" uuid="cb7626cd-a467-4e68-838f-adfbfca40730" x="450" y="20" width="100" height="30" pattern="MMMMM dd, yyyy">
+            <expression><![CDATA[new java.util.Date()]]></expression>
+        </element>
+        <element kind="rectangle" uuid="fe917b81-ff45-46cd-9751-7c857ffbffe5" x="0" y="80" width="545" height="34" forecolor="#FC0820" backcolor="#FF130F"/>
+        <element kind="line" uuid="2902ad81-72c9-4070-93f9-fd5fa635947a" x="80" y="80" width="1" height="34"/>
+        <element kind="line" uuid="802adf32-2aaf-4629-b311-48e153451e83" x="380" y="80" width="1" height="34"/>
+        <element kind="line" uuid="7aac3bde-8b23-4d0f-8421-8ae4d42d93b0" x="280" y="80" width="1" height="34"/>
+        <element kind="line" uuid="3724b419-2064-4a21-af74-416d4a9be9d3" x="180" y="80" width="1" height="34"/>
+        <element kind="staticText" uuid="c78e5e7c-15ff-44cd-adc9-f815d4776d56" x="10" y="90" width="70" height="20">
+            <text><![CDATA[id_usuario]]></text>
+        </element>
+        <element kind="staticText" uuid="bea5df33-2112-426f-9360-e8fb61132ba5" x="92" y="85" width="89" height="24">
+            <text><![CDATA[nombre]]></text>
+        </element>
+        <element kind="staticText" uuid="5fdcfcba-bedb-4bdc-83dd-582228d445c8" x="190" y="86" width="71" height="23">
+            <text><![CDATA[dni]]></text>
+        </element>
+        <element kind="staticText" uuid="5f72a358-2703-49da-ab55-9bc33eef60bb" x="290" y="90" width="65" height="22">
+            <text><![CDATA[telefono]]></text>
+        </element>
+        <element kind="staticText" uuid="783dac56-ddd5-4a8b-94d8-f5fad241d538" x="420" y="92" width="72" height="18">
+            <text><![CDATA[correo]]></text>
+        </element>
+        <element kind="image" uuid="90f77d1c-86ea-43d2-822b-52653ad7f911" x="40" y="5" width="62" height="60">
+            <expression><![CDATA["logoAyChow.jpeg"]]></expression>
+        </element>
+    </title>
+    <pageHeader height="6" splitType="Stretch"/>
+    <columnHeader splitType="Stretch"/>
+    <detail>
+        <band height="86" splitType="Stretch">
+            <element kind="textField" uuid="c8406f21-9c3c-4c49-9282-7579b7636775" x="0" y="0" width="80" height="20">
+                <expression><![CDATA[$F{id_usuario}]]></expression>
+            </element>
+            <element kind="textField" uuid="9ff7d0bc-933b-4485-bdb0-918920984efc" x="90" y="0" width="90" height="30">
+                <expression><![CDATA[$F{nombre}]]></expression>
+            </element>
+            <element kind="textField" uuid="ba7da3d4-7152-4be8-b834-bdcdcd76dda8" x="190" y="0" width="80" height="30">
+                <expression><![CDATA[$F{dni}]]></expression>
+            </element>
+            <element kind="textField" uuid="a156f6de-fbac-441d-9298-2233e668f453" x="290" y="0" width="75" height="22">
+                <expression><![CDATA[$F{telefono}]]></expression>
+            </element>
+            <element kind="textField" uuid="36c7fa10-917a-450a-82fa-56f4788bce99" x="420" y="0" width="100" height="30">
+                <expression><![CDATA[$F{correo}]]></expression>
+            </element>
+        </band>
+    </detail>
+    <columnFooter height="3" splitType="Stretch"/>
+    <pageFooter height="42" splitType="Stretch">
+        <element kind="textField" uuid="198c237b-3caa-4a55-a1bb-bbd1cf8ddf52" x="190" y="0" width="100" height="30" hTextAlign="Right">
+            <expression><![CDATA["Page " + $V{PAGE_NUMBER}]]></expression>
+        </element>
+        <element kind="textField" uuid="976ff2c5-8922-41e7-b522-9f0c3b2b5da8" x="290" y="0" width="100" height="30" evaluationTime="Report" hTextAlign="Left">
+            <expression><![CDATA[" of " + $V{PAGE_NUMBER}]]></expression>
+        </element>
+    </pageFooter>
+    <summary height="5" splitType="Stretch"/>
+</jasperReport>

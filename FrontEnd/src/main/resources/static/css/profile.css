@@ -1,0 +1,22 @@
+.container {
+    max-width: 900px;
+}
+
+h4 {
+    font-weight: bold;
+    color: #333;
+}
+
+.alert {
+    margin-top: 15px;
+}
+
+.profile-button {
+    background-color: #007bff;
+    border: none;
+    font-weight: bold;
+}
+
+.profile-button:hover {
+    background-color: #0056b3;
+}

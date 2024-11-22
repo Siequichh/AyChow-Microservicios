@@ -54,8 +54,8 @@
                             <span th:text="${userName}"></span>
                         </button>
                         <ul class="dropdown-menu" th:if="${userName != null}">
-                            <li><a class="dropdown-item" href="#">Perfil</a></li>
-                            <li><a class="dropdown-item" th:href="@{/historial}">Historial</a></li>
+                            <li><a class="dropdown-item" th:href="@{/profile}">Perfil</a></li>
+                            <li><a class="dropdown-item" th:href="@{/historialCompras}">Historial</a></li>
                             <li><hr class="dropdown-divider"></li>
                             <li>
                             <form th:action="@{/logout}" method="post" style="display: none;" id="logoutForm">

@@ -4,11 +4,6 @@ import com.utp.Aychow.Usuarios_MS.entity.Usuario;
 import com.utp.Aychow.Usuarios_MS.request.LoginRequest;
 import com.utp.Aychow.Usuarios_MS.request.UsuarioRequest;
 import com.utp.Aychow.Usuarios_MS.service.UsuarioService;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.security.Keys;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -48,6 +43,7 @@ public class UsuarioController {
         return usuarioService.editarUsuario(id, usuarioRequest);
     }
 
+
     @DeleteMapping("/{id}")
     public void deleteUsuario(@PathVariable Long id) {
         usuarioService.eliminarUsuario(id);
@@ -80,6 +76,10 @@ public class UsuarioController {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 
-
 }
+
+
+
+
+
 

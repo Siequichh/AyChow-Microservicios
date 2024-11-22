@@ -32,7 +32,7 @@ public class SecurityConfig {
                         .requestMatchers("/","/css/**","/js/**", "/img/**","AyChow/**","/upload","/tienda","/favoritos","/conocenos","/login","/registro","/restaurarContraseña","/productos/**","/usuarios/**","/carrito/**","/historial")
                         .permitAll()
                         .requestMatchers("/admin/**").hasRole("Admin")
-                        .requestMatchers("/checkout")
+                        .requestMatchers("/checkout","/profile","/historialCompras")
                         .authenticated()
                         .anyRequest().authenticated()
                 )
