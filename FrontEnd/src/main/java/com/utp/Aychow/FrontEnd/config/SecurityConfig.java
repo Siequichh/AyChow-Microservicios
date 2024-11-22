@@ -34,7 +34,7 @@ public class SecurityConfig {
                         .requestMatchers("/admin/**").hasRole("Admin")
                         .requestMatchers("/checkout","/profile","/historialCompras")
                         .authenticated()
-                        .anyRequest().authenticated()
+                        .anyRequest().permitAll()
                 )
                 .formLogin(login -> login
                 .loginPage("/login")
