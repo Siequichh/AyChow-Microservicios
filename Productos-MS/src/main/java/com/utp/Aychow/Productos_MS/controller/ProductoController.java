@@ -51,7 +51,7 @@ public class ProductoController {
     }
 
 
-    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value="/nuevo", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public Mono<ResponseEntity<Producto>> crearProducto(
             @RequestParam("nombre") String nombre,
             @RequestParam("marca") String marca,
