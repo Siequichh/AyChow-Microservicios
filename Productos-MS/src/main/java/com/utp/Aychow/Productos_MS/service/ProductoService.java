@@ -15,4 +15,5 @@ public interface ProductoService {
     List<Producto> getProductosConRatingMenorOIgualA(float rating);
     List<Producto> getProductosPorNombre(String nombre);
     List<Producto> getProductosPorMarca(String marca);
+    void reducirStock(Long idProducto, int cantidad);
 }

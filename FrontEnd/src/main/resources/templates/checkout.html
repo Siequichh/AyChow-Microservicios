@@ -56,6 +56,7 @@
   <!-- Formulario de entrega -->
   <div class="form-container">
     <h4>1. Ingrese sus datos de entrega</h4>
+
     <form>
       <div class="form-group">
         <label for="dni">D.N.I./C.E.</label>
@@ -75,7 +76,7 @@
       </div>
       <div class="form-group">
         <label for="direccion">Dirección de Envío</label>
-        <input type="text" class="form-control" id="direccion" placeholder="Calle, Número, Depto/Interior/Referencia" required>
+        <input name="direccion" type="text" class="form-control" id="direccion" placeholder="Calle, Número, Depto/Interior/Referencia" required>
       </div>
       <div class="form-group">
         <label for="departamento">Departamento</label>
@@ -128,18 +129,37 @@
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
 <script th:src="@{/js/scriptjs.js}"></script>
+<script th:inline="javascript">
+  const usuarioId = /*[[${usuarioId}]]*/ null;
+  if (!usuarioId) {
+    console.error("El ID del usuario no está definido.");
+  } else {
+    console.log("ID del usuario:", usuarioId);
+  }
+</script>
+
 <script>
   $(document).ready(function () {
-    
-    const carrito = JSON.parse(localStorage.getItem('carrito')) || []; 
-    const $productosContainer = $('#productos'); 
-    const $subtotalEl = $('#subtotal'); 
-    const $impuestosEl = $('#impuestos'); 
-    const $totalEl = $('#total'); 
+    // Leer el carrito desde localStorage o inicializarlo vacío
+    let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
 
-   
+    // Contenedores y elementos para renderizar
+    const $productosContainer = $('#productos');
+    const $subtotalEl = $('#subtotal');
+    const $impuestosEl = $('#impuestos');
+    const $totalEl = $('#total');
+
+    // Asegurar que todos los productos tengan una cantidad definida
+    carrito.forEach(producto => {
+      if (!producto.cantidad) {
+        producto.cantidad = 1; // Valor predeterminado
+      }
+    });
+    localStorage.setItem('carrito', JSON.stringify(carrito));
+
+    // Función para renderizar productos en el carrito
     function renderProductos() {
-      $productosContainer.empty(); 
+      $productosContainer.empty();
 
       if (carrito.length === 0) {
         $productosContainer.append('<p class="text-muted">No hay productos en el carrito.</p>');
@@ -148,61 +168,94 @@
 
       carrito.forEach((producto, index) => {
         const productoHTML = `
-                <div class="d-flex justify-content-between align-items-center border-bottom pb-3 mb-3">
-                    <div class="d-flex align-items-center">
-                        <img src="${producto.imagen}" alt="${producto.nombre}" class="img-fluid me-3" style="width: 80px; height: 80px; object-fit: cover;">
-                        <div>
-                            <h5>${producto.nombre}</h5>
-                            <p class="mb-0">S/ ${producto.precio.toFixed(2)}</p>
-                        </div>
-                    </div>
-                    <button class="btn btn-danger btn-sm eliminar-producto" data-index="${index}">Eliminar</button>
-                </div>
-            `;
+        <div class="d-flex justify-content-between align-items-center border-bottom pb-3 mb-3">
+          <div class="d-flex align-items-center">
+            <img src="${producto.imagen}" alt="${producto.nombre}" class="img-fluid me-3" style="width: 80px; height: 80px; object-fit: cover;">
+            <div>
+              <h5>${producto.nombre}</h5>
+              <p class="mb-0">S/ ${producto.precio.toFixed(2)} x ${producto.cantidad}</p>
+            </div>
+          </div>
+          <button class="btn btn-danger btn-sm eliminar-producto" data-index="${index}">Eliminar</button>
+        </div>
+      `;
         $productosContainer.append(productoHTML);
       });
 
-      calcularTotales(); 
+      calcularTotales();
     }
 
-    
+    // Función para calcular totales
     function calcularTotales() {
-      const subtotal = carrito.reduce((sum, producto) => sum + producto.precio, 0);
-      const impuestos = subtotal * 0.02; 
+      const subtotal = carrito.reduce((sum, producto) =>
+              sum + producto.precio * producto.cantidad, 0
+      );
+      const impuestos = subtotal * 0.02; // Suponiendo un 2% de impuestos
       const total = subtotal + impuestos;
 
-     
       $subtotalEl.text(subtotal.toFixed(2));
       $impuestosEl.text(impuestos.toFixed(2));
       $totalEl.text(total.toFixed(2));
     }
 
-    
+    // Eliminar producto del carrito
     $(document).on('click', '.eliminar-producto', function () {
-      const index = $(this).data('index'); 
-      carrito.splice(index, 1); 
-      localStorage.setItem('carrito', JSON.stringify(carrito)); 
-      renderProductos(); 
+      const index = $(this).data('index');
+      carrito.splice(index, 1);
+      localStorage.setItem('carrito', JSON.stringify(carrito));
+      renderProductos();
     });
 
-    
-    renderProductos();
-
-    
-    $('#realizar-pedido').click(function () {
-      if ($('#terminos').is(':checked')) {
-        if (carrito.length > 0) {
-          alert('¡Compra realizada con éxito!');
-          localStorage.removeItem('carrito'); 
-          location.reload(); 
-        } else {
-          alert('El carrito está vacío.');
-        }
-      } else {
+    // Al hacer clic en "Realizar Pedido"
+    $('#realizar-pedido').click(async function () {
+      if (!$('#terminos').is(':checked')) {
         alert('Debe aceptar los Términos y Condiciones.');
+        return;
+      }
+
+      if (carrito.length === 0) {
+        alert('El carrito está vacío.');
+        return;
+      }
+
+      const direccionEntrega = $('#direccion').val() || 'Dirección no proporcionada';
+
+      const ventaData = {
+        idUsuario: usuarioId, // Asegúrate de tener definido el ID del usuario
+        total: parseFloat($('#total').text()),
+        direccionEntrega: direccionEntrega,
+        detalles: carrito.map(producto => ({
+          idProducto: producto.id,
+          cantidad: producto.cantidad,
+          precioUnitario: producto.precio
+        }))
+      };
+
+      // Guardar los datos de la venta en localStorage
+      localStorage.setItem('ventaData', JSON.stringify(ventaData));
+
+      try {
+        const response = await fetch('http://localhost:8080/api/paypal/create-payment', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(ventaData)
+        });
+
+        if (response.ok) {
+          const approvalUrl = await response.text();
+          window.location.href = approvalUrl; // Redirigir a PayPal
+        } else {
+          alert('Error al iniciar el pago con PayPal.');
+        }
+      } catch (error) {
+        console.error('Error al realizar el pedido:', error);
       }
     });
+
+    // Inicializar la vista
+    renderProductos();
   });
+
 </script>
 </body>
 </html>

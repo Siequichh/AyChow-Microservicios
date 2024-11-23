@@ -42,10 +42,6 @@ public class VentaController {
         return ventaService.getVentasByIdUsuario(idUsuario);
     }
 
-//    @PostMapping
-//    public Venta generarVenta(@RequestBody VentaRequest ventaRequest) {
-//        return ventaService.generarVenta(ventaRequest);
-//    }
     @PostMapping
     public ResponseEntity<Venta> generarVenta(@RequestBody VentaRequest ventaRequest) {
         Venta nuevaVenta = ventaService.generarVenta(ventaRequest);

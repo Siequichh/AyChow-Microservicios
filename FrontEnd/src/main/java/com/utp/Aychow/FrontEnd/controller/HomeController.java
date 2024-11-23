@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.print.attribute.standard.PrinterInfo;
 import java.security.Principal;
 import java.util.List;
 
@@ -47,10 +48,22 @@ public class HomeController {
         return "index";
     }
 
-        @GetMapping("/checkout")
-        public String checkout() {
-            return "checkout";
-        }
+    @GetMapping("/checkout")
+    public String checkout(Model model, Principal principal) {
+        Usuario usuario = webClientBuilder.build()
+                .get()
+                .uri("http://api-gateway/api/usuarios/email?email=" + principal.getName())
+                .retrieve()
+                .bodyToMono(Usuario.class)
+                .block();
+
+        Long idUsuario = usuario.getIdUsuario();
+
+        model.addAttribute("usuarioId", idUsuario);
+
+        return "checkout";
+    }
+
 
 
     @GetMapping("/upload")
@@ -181,5 +194,18 @@ public class HomeController {
 
         model.addAttribute("compras", ventas);
         return "historialCompras";
+    }
+
+    @GetMapping("/success")
+    public String succees(Principal principal,Model model) {
+        Usuario usuario = webClientBuilder.build()
+                .get()
+                .uri("http://api-gateway/api/usuarios/email?email=" + principal.getName())
+                .retrieve()
+                .bodyToMono(Usuario.class)
+                .block();
+
+        model.addAttribute("usuario", usuario);
+        return "success";
     }
 }

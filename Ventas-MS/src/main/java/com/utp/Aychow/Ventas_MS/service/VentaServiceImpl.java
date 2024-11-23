@@ -5,18 +5,29 @@ import com.utp.Aychow.Ventas_MS.dao.DetalleVentaDAO;
 import com.utp.Aychow.Ventas_MS.dao.VentaDAO;
 import com.utp.Aychow.Ventas_MS.entity.DetalleVenta;
 import com.utp.Aychow.Ventas_MS.entity.Venta;
+import com.utp.Aychow.Ventas_MS.request.DetalleVentaRequest;
 import com.utp.Aychow.Ventas_MS.request.VentaRequest;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
 public class VentaServiceImpl implements VentaService {
+
+    private final WebClient.Builder webClientBuilder;
+
+    public VentaServiceImpl(WebClient.Builder webClientBuilder) {
+        this.webClientBuilder = webClientBuilder;
+    }
 
     @Autowired
     private VentaDAO ventaDAO;
@@ -39,7 +50,6 @@ public class VentaServiceImpl implements VentaService {
         return ventaDAO.findByIdUsuario(idUsuario);
     }
 
-
 @Override
 @Transactional
 public Venta generarVenta(VentaRequest ventaRequest) {
@@ -58,7 +68,25 @@ public Venta generarVenta(VentaRequest ventaRequest) {
         detalle.setIdProducto(detReq.getIdProducto());
         detalle.setCantidad(detReq.getCantidad());
         detalle.setPrecioUnitario(detReq.getPrecioUnitario());
-        detalle.setDireccionEntrega(detReq.getDireccionEntrega());
+        detalle.setDireccionEntrega(detReq.getDireccionEntrega() != null ? detReq.getDireccionEntrega() : "Dirección no proporcionada");
+
+        // Reducir el stock
+        try {
+            webClientBuilder.build()
+                    .patch()
+                    .uri("http://api-gateway/api/productos/reducir-stock")
+                    .bodyValue(Map.of(
+                            "idProducto", detReq.getIdProducto(),
+                            "cantidad", detReq.getCantidad()
+                    ))
+                    .retrieve()
+                    .bodyToMono(Void.class)
+                    .block();
+        } catch (Exception e) {
+            throw new RuntimeException("Fallo al comunicar con el servicio de productos", e);
+        }
+
+
         return detalle;
     }).collect(Collectors.toList());
 
@@ -66,6 +94,11 @@ public Venta generarVenta(VentaRequest ventaRequest) {
 
     return savedVenta;
 }
+
+
+
+
+
 
     @Override
     @Transactional

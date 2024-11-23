@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import java.io.IOException;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/productos")
@@ -134,6 +135,15 @@ public class ProductoController {
                 .contentType(MediaType.IMAGE_PNG)
                 .body(imagen));
     }
+
+    @PatchMapping("/reducir-stock")
+    public ResponseEntity<Void> reducirStock(@RequestBody Map<String, Integer> request) {
+        Long idProducto = Long.valueOf(request.get("idProducto"));
+        int cantidad = request.get("cantidad");
+        productoService.reducirStock(idProducto, cantidad);
+        return ResponseEntity.noContent().build();
+    }
+
 
 
 }

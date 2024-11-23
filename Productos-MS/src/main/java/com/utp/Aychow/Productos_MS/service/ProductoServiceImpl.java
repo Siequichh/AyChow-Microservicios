@@ -94,4 +94,17 @@ public class ProductoServiceImpl implements ProductoService {
     public List<Producto> getProductosPorMarca(String marca) {
         return productoDAO.findByMarca(marca);
     }
+
+    @Override
+    @Transactional
+    public void reducirStock(Long idProducto, int cantidad) {
+        Producto producto = productoDAO.findById(idProducto)
+                .orElseThrow(() -> new RuntimeException("Producto no encontrado: " + idProducto));
+        if (producto.getCantidad() < cantidad) {
+            throw new RuntimeException("Stock insuficiente para el producto: " + idProducto);
+        }
+        producto.setCantidad(producto.getCantidad() - cantidad);
+        productoDAO.save(producto);
+    }
+
 }

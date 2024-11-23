@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es"><head>
+    <meta charset="UTF-8">
+    <title>Éxito</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+<h1>¡Pago realizado con éxito!</h1>
+<p>Estamos procesando tu pedido. Por favor, espera...</p>
+<input type="hidden" id="usuarioId" th:value="${usuario.getIdUsuario()}">
+
+<script>
+    $(document).ready(async function () {
+        const urlParams = new URLSearchParams(window.location.search);
+        const paymentId = urlParams.get('paymentId');
+        const payerId = urlParams.get('PayerID');
+
+        if (!paymentId || !payerId) {
+            alert('Error: Parámetros de pago faltantes.');
+            return;
+        }
+
+        const ventaData = JSON.parse(localStorage.getItem('ventaData'));
+
+        if (!ventaData) {
+            alert('No se encontró la información de la venta. Intenta nuevamente.');
+            return;
+        }
+
+        try {
+            const ventaResponse = await fetch('http://localhost:8080/api/ventas', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(ventaData)
+            });
+
+            if (ventaResponse.ok) {
+                alert('Venta generada con éxito.');
+
+                localStorage.removeItem('ventaData');
+                localStorage.removeItem('carrito');
+                window.location.href = '/tienda'; 
+            } else {
+                alert('Hubo un problema al generar la venta.');
+            }
+        } catch (error) {
+            console.error('Error inesperado:', error);
+            alert('Ocurrió un error al crear la venta. Intenta nuevamente.');
+        }
+    });
+
+</script>
+
+</body>
+</html>
