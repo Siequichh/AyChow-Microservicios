@@ -121,4 +121,8 @@ public Venta generarVenta(VentaRequest ventaRequest) {
             return new byte[0];
         }
 
+    public Venta obtenerUltimaVentaPorUsuario(Long idUsuario) {
+        return ventaDAO.findTopByIdUsuarioOrderByIdVentaDesc(idUsuario);
+    }
+
 }

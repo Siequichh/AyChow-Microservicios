@@ -208,4 +208,17 @@ public class HomeController {
         model.addAttribute("usuario", usuario);
         return "success";
     }
+
+    @GetMapping("/exito")
+    public String exito(Model model, Principal principal) {
+        Usuario usuario = webClientBuilder.build()
+                .get()
+                .uri("http://api-gateway/api/usuarios/email?email=" + principal.getName())
+                .retrieve()
+                .bodyToMono(Usuario.class)
+                .block();
+
+        model.addAttribute("usuario", usuario);
+        return "exito";
+    }
 }

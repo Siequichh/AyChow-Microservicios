@@ -4,20 +4,21 @@
 	<parameter name="idVenta" class="java.lang.Long"/>
 	<parameter name="idUsuario" class="java.lang.Long"/>
 	<queryString language="SQL"><![CDATA[SELECT
-        detalle_venta.id_producto,
-        detalle_venta.cantidad,
-        detalle_venta.precio_unitario,
-        venta.fecha,
-        venta.total,
-        detalle_venta.direccion_entrega,
-        detalle_venta.id_venta,
-        venta.id_usuario
-    FROM
-        detalle_venta
-    JOIN
-        venta ON detalle_venta.id_venta = $P!{idVenta}
-    WHERE
-        venta.id_usuario = $P!{idUsuario};]]></queryString>
+    venta.id_venta,
+    venta.fecha,
+    venta.total,
+    detalle_venta.id_producto,
+    detalle_venta.cantidad,
+    detalle_venta.precio_unitario,
+    detalle_venta.direccion_entrega,
+    venta.id_usuario
+FROM
+    venta
+JOIN
+    detalle_venta ON venta.id_venta = detalle_venta.id_venta
+WHERE
+    venta.id_venta = $P!{idVenta}
+    AND venta.id_usuario = $P!{idUsuario};]]></queryString>
 	<field name="id_producto" class="java.lang.Long">
 		<fieldDescription><![CDATA[id_producto]]></fieldDescription>
 	</field>

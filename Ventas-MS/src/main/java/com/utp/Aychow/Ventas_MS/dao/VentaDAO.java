@@ -8,5 +8,5 @@ import java.util.List;
 @Repository
 public interface VentaDAO extends JpaRepository<Venta, Long> {
     List<Venta> findByIdUsuario(Long idUsuario);
-
+    Venta findTopByIdUsuarioOrderByIdVentaDesc(Long idUsuario);
 }

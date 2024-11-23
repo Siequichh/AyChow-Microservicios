@@ -14,4 +14,5 @@ public interface VentaService {
     void eliminarVenta(Long id);
     byte[] emitirBoletaPDF(Long idVenta);
     List<DetalleVenta> obtenerDetallesPorVenta(Long idVenta);
+    Venta obtenerUltimaVentaPorUsuario(Long idUsuario);
 }

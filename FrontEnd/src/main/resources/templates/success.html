@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="es"><head>
+<html lang="es">
+<head>
     <meta charset="UTF-8">
     <title>Éxito</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -28,6 +29,7 @@
         }
 
         try {
+            // Crear la venta en el servidor
             const ventaResponse = await fetch('http://localhost:8080/api/ventas', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -35,11 +37,28 @@
             });
 
             if (ventaResponse.ok) {
-                alert('Venta generada con éxito.');
+
+                const venta = await ventaResponse.json();
+                const idVenta = venta.idVenta;
+                const idUsuario = ventaData.idUsuario;
+
+                localStorage.setItem('usuarioId',idUsuario);
+
+
+                alert('Venta generada con éxito. Generando Pdf.');
+
+                const pdfUrl = `http://localhost:8080/api/ventas/pdf/${idVenta}?idUsuario=${idUsuario}`;
+                const a = document.createElement('a');
+                a.href = pdfUrl;
+                a.download = `recibo_venta_${idVenta}.pdf`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+
 
                 localStorage.removeItem('ventaData');
                 localStorage.removeItem('carrito');
-                window.location.href = '/tienda'; 
+                window.location.href = '/exito';
             } else {
                 alert('Hubo un problema al generar la venta.');
             }
@@ -48,7 +67,6 @@
             alert('Ocurrió un error al crear la venta. Intenta nuevamente.');
         }
     });
-
 </script>
 
 </body>

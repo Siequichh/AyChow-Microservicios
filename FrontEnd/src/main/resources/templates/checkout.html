@@ -218,7 +218,14 @@
         return;
       }
 
-      const direccionEntrega = $('#direccion').val() || 'Dirección no proporcionada';
+      const direccionEntrega = $('#direccion').val().trim();
+
+      // Validar dirección
+      if (!direccionEntrega) {
+        alert('Debe proporcionar una dirección de entrega.');
+        $('#direccion').focus();
+        return;
+      }
 
       const ventaData = {
         idUsuario: usuarioId, // Asegúrate de tener definido el ID del usuario

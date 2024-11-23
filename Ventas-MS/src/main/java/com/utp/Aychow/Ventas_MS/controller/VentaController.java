@@ -90,6 +90,15 @@ public class VentaController {
         }
     }
 
+    @GetMapping("/ultima")
+    public ResponseEntity<?> obtenerUltimaVenta(@RequestParam Long idUsuario) {
+        Venta ultimaVenta = ventaService.obtenerUltimaVentaPorUsuario(idUsuario);
+        if (ultimaVenta != null) {
+            return ResponseEntity.ok(ultimaVenta);
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se encontró la última venta para el usuario.");
+    }
+
 
 
 }
